@@ -11,6 +11,9 @@ importers:
       '@neondatabase/serverless':
         specifier: ^0.10.4
         version: 0.10.4
+      '@unpic/svelte':
+        specifier: ^1.0.0
+        version: 1.0.0(svelte@5.39.4)
       better-auth:
         specifier: ^1.3.13
         version: 1.3.13(@sveltejs/kit@2.42.2(@sveltejs/vite-plugin-svelte@6.2.0(svelte@5.39.4)(vite@7.1.7(@types/node@22.18.6)(jiti@2.5.1)(lightningcss@1.30.1)))(svelte@5.39.4)(vite@7.1.7(@types/node@22.18.6)(jiti@2.5.1)(lightningcss@1.30.1)))(svelte@5.39.4)
@@ -917,6 +920,14 @@ packages:
   '@types/pg@8.11.6':
     resolution: {integrity: sha512-/2WmmBXHLsfRqzfHW7BNZ8SbYzE8OSk7i3WjFYvfgRHj7S1xj+16Je5fUKv3lVdVzk/zn9TXOqf+avFCFIE0yQ==}
 
+  '@unpic/core@1.0.2':
+    resolution: {integrity: sha512-wZFg5K///uWutEKXS2PJeZZ1jpVj1Ao75pxBcDXbp5QVg7l347gUX/Q2w+cQdBBghHbJE+ndRaaVvnt8ACmiVQ==}
+
+  '@unpic/svelte@1.0.0':
+    resolution: {integrity: sha512-fR3tylUx3hsRqNk1/ZLd4kXA36OLyOvNiD7Koc7Us0UWOUEQ3NgALWYNTpDYBMrcR2Kpik4aTUcdp7RLsFQKnQ==}
+    peerDependencies:
+      svelte: ^5
+
   '@vercel/nft@0.30.1':
     resolution: {integrity: sha512-2mgJZv4AYBFkD/nJ4QmiX5Ymxi+AisPLPcS/KPXVqniyQNqKXX+wjieAbDXQP3HcogfEbpHoRMs49Cd4pfkk8g==}
     engines: {node: '>=18'}
@@ -1559,6 +1570,9 @@ packages:
     resolution: {integrity: sha512-gmBGslpoQJtgnMAvOVqGZpEz9dyoKTCzy2nfz/n8aIFhN/jCE/rCmcxabB6jOOHV+0WNnylOxaxBQPSvcWklhA==}
     engines: {node: '>=12'}
 
+  style-object-to-css-string@1.1.3:
+    resolution: {integrity: sha512-bISQoUsir/qGfo7vY8rw00ia9nnyE1jvYt3zZ2jhdkcXZ6dAEi74inMzQ6On57vFI+I4Fck6wOv5UI9BEwJDgw==}
+
   svelte-check@4.3.1:
     resolution: {integrity: sha512-lkh8gff5gpHLjxIV+IaApMxQhTGnir2pNUAqcNgeKkvK5bT/30Ey/nzBxNLDlkztCH4dP7PixkMt9SWEKFPBWg==}
     engines: {node: '>= 18.0.0'}
@@ -1613,6 +1627,9 @@ packages:
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
+  unpic@4.1.3:
+    resolution: {integrity: sha512-ZXxitZC81D+szUorVQAKaaGchZjUhI6vUyHVVLaHToai9iToNIjoeg6XDUpd/0VthFIRyHbEe7XcxF4L933yQw==}
 
   vite@7.1.7:
     resolution: {integrity: sha512-VbA8ScMvAISJNJVbRDTJdCwqQoAareR/wutevKanhR2/1EkoXVZVkkORaYm/tNVCjP/UDTKtcw3bAkwOUdedmA==}
@@ -2350,6 +2367,16 @@ snapshots:
       pg-protocol: 1.10.3
       pg-types: 4.1.0
 
+  '@unpic/core@1.0.2':
+    dependencies:
+      unpic: 4.1.3
+
+  '@unpic/svelte@1.0.0(svelte@5.39.4)':
+    dependencies:
+      '@unpic/core': 1.0.2
+      style-object-to-css-string: 1.1.3
+      svelte: 5.39.4
+
   '@vercel/nft@0.30.1(rollup@4.52.0)':
     dependencies:
       '@mapbox/node-pre-gyp': 2.0.0
@@ -2902,6 +2929,8 @@ snapshots:
     dependencies:
       ansi-regex: 6.2.2
 
+  style-object-to-css-string@1.1.3: {}
+
   svelte-check@4.3.1(picomatch@4.0.3)(svelte@5.39.4)(typescript@5.9.2):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
@@ -2965,6 +2994,8 @@ snapshots:
   uncrypto@0.1.3: {}
 
   undici-types@6.21.0: {}
+
+  unpic@4.1.3: {}
 
   vite@7.1.7(@types/node@22.18.6)(jiti@2.5.1)(lightningcss@1.30.1):
     dependencies:
