@@ -4,6 +4,7 @@
     import { Button } from "$lib/components/ui/button";
     import { Label } from "$lib/components/ui/label";
     import ThemeSwitcher from "$lib/components/custom/theme-switcher.svelte";
+    import { Image } from "@unpic/svelte";
 
     let email = $state("");
     let isLoading = $state(false);
