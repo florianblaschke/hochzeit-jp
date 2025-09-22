@@ -3,13 +3,14 @@
 
     const session = authClient.useSession();
 
-    // const { data, error } = await authClient.signIn.magicLink({
-    //     email: "user@email.com", // required
-    //     name: "my-name",
-    //     callbackURL: "/dashboard",
-    //     newUserCallbackURL: "/welcome",
-    //     errorCallbackURL: "/error",
-    // });
+    async function loginWithEmail() {
+        const { data, error } = await authClient.signIn.magicLink({
+            email: "user@email.com", // required
+            name: "my-name",
+        });
+
+        console.log(data, error);
+    }
 </script>
 
 <div>
@@ -29,9 +30,7 @@
     {:else}
         <button
             on:click={async () => {
-                await authClient.signIn.social({
-                    provider: "github",
-                });
+                await loginWithEmail();
             }}
         >
             Continue with GitHub
