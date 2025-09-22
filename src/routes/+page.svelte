@@ -8,8 +8,6 @@
             email: "user@email.com", // required
             name: "my-name",
         });
-
-        console.log(data, error);
     }
 </script>
 
