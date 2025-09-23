@@ -40,19 +40,6 @@
 </script>
 
 <div class="min-h-screen bg-background">
-    <!-- Header -->
-    <header class="border-b border-border">
-        <div
-            class="container mx-auto px-4 py-4 flex justify-between items-center"
-        >
-            <h1 class="text-2xl font-bold text-foreground">
-                Wedding Celebration
-            </h1>
-            <ThemeSwitcher />
-        </div>
-    </header>
-
-    <!-- Main Content -->
     <main class="container mx-auto px-4 py-16">
         {#if $session.data}
             <!-- Authenticated State -->

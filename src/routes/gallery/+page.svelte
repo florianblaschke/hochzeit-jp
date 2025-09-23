@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { buttonVariants } from "$lib/components/ui/button";
+    import { cn } from "$lib/utils";
     import { onMount } from "svelte";
 
     // Mock data for demonstration - replace with actual data source
@@ -41,9 +43,12 @@
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8">
-    <div class="mb-8">
+    <div class="mb-8 flex items-center justify-between">
         <h1 class="text-3xl font-bold mb-2">Gallery</h1>
         <p class="text-muted-foreground">View all uploaded images</p>
+        <a href="/upload" class={cn(buttonVariants({ variant: "link" }))}>
+            Upload images
+        </a>
     </div>
 
     {#if loading}

@@ -1,22 +1,32 @@
 <script lang="ts">
     import { Button } from "$lib/components/ui/button";
+    import { SvelteMap } from "svelte/reactivity";
     import {
-        Upload,
-        X,
-        FileImage,
-        Video,
-        AlertCircle,
         Check,
+        CircleAlert,
+        FileImage,
+        LoaderCircle,
+        Upload,
+        Video,
+        X,
     } from "@lucide/svelte";
-    import { onMount } from "svelte";
+    import { upload } from "@vercel/blob/client";
 
+    type Status = "pending" | "uploading" | "success" | "error";
     let fileInput: HTMLInputElement;
-    let dragActive = false;
-    let files: File[] = [];
-    let uploadProgress: { [key: string]: number } = {};
-    let uploadStatus: {
-        [key: string]: "pending" | "uploading" | "success" | "error";
-    } = {};
+    let dragActive = $state(false);
+
+    let files = $state(
+        new SvelteMap<
+            string,
+            {
+                file: File;
+                status: Status;
+                progress: number;
+                controller: AbortController;
+            }
+        >(),
+    );
 
     const MAX_FILE_SIZE = 250 * 1024 * 1024; // 250MB
     const ACCEPTED_TYPES = [
@@ -78,19 +88,22 @@
             return true;
         });
 
-        files = [...files, ...validFiles];
-
         // Initialize status for new files
         for (const file of validFiles) {
-            uploadStatus[file.name] = "pending";
-            uploadProgress[file.name] = 0;
+            files.set(file.name, {
+                file,
+                status: "pending",
+                controller: new AbortController(),
+                progress: 0,
+            });
         }
     }
 
     function removeFile(fileToRemove: File) {
-        files = files.filter((file) => file !== fileToRemove);
-        delete uploadStatus[fileToRemove.name];
-        delete uploadProgress[fileToRemove.name];
+        const file = files.get(fileToRemove.name);
+        file?.controller.abort();
+
+        files.delete(fileToRemove.name);
     }
 
     function formatFileSize(bytes: number): string {
@@ -101,34 +114,50 @@
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
     }
 
-    function getFileIcon(file: File) {
-        return file.type.startsWith("video/") ? Video : FileImage;
-    }
-
     async function uploadFiles() {
-        if (files.length === 0) return;
+        if (files.size === 0) {
+            return;
+        }
 
-        // Simulate upload process
-        for (const file of files) {
-            if (uploadStatus[file.name] === "success") continue;
-
-            uploadStatus[file.name] = "uploading";
-
-            // Simulate upload progress
-            for (let progress = 0; progress <= 100; progress += 10) {
-                uploadProgress[file.name] = progress;
-                await new Promise((resolve) => setTimeout(resolve, 100));
+        for (const [name, props] of files) {
+            if (props.status === "success") {
+                continue;
             }
 
-            // Simulate random success/failure
-            uploadStatus[file.name] = Math.random() > 0.1 ? "success" : "error";
+            files.set(name, {
+                ...props,
+                status: "uploading",
+            });
+
+            try {
+                const response = await upload(name, props.file, {
+                    access: "public",
+                    handleUploadUrl: "/api/upload",
+                    onUploadProgress: (ctx) => {
+                        const currentFile = files.get(name);
+                        if (currentFile) {
+                            files.set(name, {
+                                ...currentFile,
+                                progress: ctx.percentage,
+                            });
+                        }
+                    },
+                    abortSignal: props.controller.signal,
+                });
+
+                files.set(name, { ...props, status: "success" });
+
+                if (!response.url) {
+                    throw new Error("Failed to get upload token");
+                }
+            } catch (error) {
+                files.set(name, { ...props, status: "error" });
+            }
         }
     }
 
     function clearAll() {
-        files = [];
-        uploadProgress = {};
-        uploadStatus = {};
+        files.clear();
     }
 
     function openFileDialog() {
@@ -155,7 +184,7 @@
         type="file"
         multiple
         accept="image/*,video/*"
-        on:change={handleFileSelect}
+        onchange={handleFileSelect}
         class="hidden"
     />
 
@@ -165,14 +194,14 @@
             class="border-2 border-dashed rounded-lg p-8 text-center transition-colors {dragActive
                 ? 'border-primary bg-primary/5'
                 : 'border-muted-foreground/25 hover:border-muted-foreground/50'}"
-            on:dragenter={handleDragEnter}
-            on:dragleave={handleDragLeave}
-            on:dragover={handleDragOver}
-            on:drop={handleDrop}
+            ondragenter={handleDragEnter}
+            ondragleave={handleDragLeave}
+            ondragover={handleDragOver}
+            ondrop={handleDrop}
             role="button"
             tabindex="0"
-            on:click={openFileDialog}
-            on:keydown={(e) => e.key === "Enter" && openFileDialog()}
+            onclick={openFileDialog}
+            onkeydown={(e) => e.key === "Enter" && openFileDialog()}
         >
             <Upload class="mx-auto h-12 w-12 text-muted-foreground mb-4" />
             <h3 class="text-lg font-medium mb-2">
@@ -189,11 +218,11 @@
     </div>
 
     <!-- File List -->
-    {#if files.length > 0}
+    {#if files.size > 0}
         <div class="mb-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xl font-semibold">
-                    Selected Files ({files.length})
+                    Selected Files ({files.size})
                 </h2>
                 <div class="space-x-2">
                     <Button variant="outline" size="sm" onclick={clearAll}>
@@ -201,9 +230,9 @@
                     </Button>
                     <Button
                         onclick={uploadFiles}
-                        disabled={files.every(
-                            (f) => uploadStatus[f.name] === "success",
-                        )}
+                        disabled={Object.values(
+                            Object.fromEntries(files),
+                        ).every((f) => f.status === "success")}
                     >
                         Upload Files
                     </Button>
@@ -211,7 +240,7 @@
             </div>
 
             <div class="space-y-3">
-                {#each files as file (file.name + file.size)}
+                {#each files as [name, { file, status, progress }] (name)}
                     <div
                         class="flex items-center space-x-4 p-4 border rounded-lg bg-card"
                     >
@@ -231,46 +260,38 @@
                                 {formatFileSize(file.size)}
                             </p>
 
-                            {#if uploadStatus[file.name] === "uploading"}
+                            {#if status === "uploading"}
                                 <div class="mt-2">
                                     <div
                                         class="w-full bg-muted rounded-full h-2"
                                     >
                                         <div
                                             class="bg-primary h-2 rounded-full transition-all duration-300"
-                                            style="width: {uploadProgress[
-                                                file.name
-                                            ] || 0}%"
+                                            style="width: {progress || 0}%"
                                         ></div>
                                     </div>
                                     <p
                                         class="text-xs text-muted-foreground mt-1"
                                     >
-                                        Uploading... {uploadProgress[
-                                            file.name
-                                        ] || 0}%
+                                        Uploading... {progress || 0}%
                                     </p>
                                 </div>
                             {/if}
                         </div>
 
                         <div class="flex items-center space-x-2">
-                            {#if uploadStatus[file.name] === "success"}
-                                <Check class="h-5 w-5 text-green-500" />
-                            {:else if uploadStatus[file.name] === "error"}
-                                <AlertCircle class="h-5 w-5 text-red-500" />
-                            {:else if uploadStatus[file.name] === "uploading"}
-                                <div
-                                    class="h-5 w-5 border-2 border-primary border-t-transparent rounded-full animate-spin"
-                                ></div>
+                            {#if status === "success"}
+                                <Check class="size-5 text-green-500" />
+                            {:else if status === "error"}
+                                <CircleAlert class="size-5 text-red-500" />
+                            {:else if status === "uploading"}
+                                <LoaderCircle class="size-5 animate-spin" />
                             {/if}
 
                             <Button
                                 variant="ghost"
                                 size="sm"
                                 onclick={() => removeFile(file)}
-                                disabled={uploadStatus[file.name] ===
-                                    "uploading"}
                             >
                                 <X class="h-4 w-4" />
                             </Button>
@@ -282,33 +303,36 @@
     {/if}
 
     <!-- Upload Statistics -->
-    {#if files.length > 0}
+    {#if files.size > 0}
         <div class="bg-muted/50 rounded-lg p-4">
             <h3 class="font-medium mb-2">Upload Summary</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div>
                     <span class="text-muted-foreground">Total files:</span>
-                    <span class="font-medium ml-2">{files.length}</span>
+                    <span class="font-medium ml-2">{files.size}</span>
                 </div>
                 <div>
                     <span class="text-muted-foreground">Total size:</span>
                     <span class="font-medium ml-2">
                         {formatFileSize(
-                            files.reduce((sum, file) => sum + file.size, 0),
+                            Object.values(Object.fromEntries(files)).reduce(
+                                (sum, f) => sum + f.file.size,
+                                0,
+                            ),
                         )}
                     </span>
                 </div>
                 <div>
                     <span class="text-muted-foreground">Uploaded:</span>
                     <span class="font-medium ml-2 text-green-600">
-                        {Object.values(uploadStatus).filter(
-                            (status) => status === "success",
+                        {Object.values(Object.fromEntries(files)).filter(
+                            (f) => f.status === "success",
                         ).length}
                     </span>
                     /
                     <span class="font-medium text-red-600">
-                        {Object.values(uploadStatus).filter(
-                            (status) => status === "error",
+                        {Object.values(Object.fromEntries(files)).filter(
+                            (f) => f.status === "error",
                         ).length} failed
                     </span>
                 </div>

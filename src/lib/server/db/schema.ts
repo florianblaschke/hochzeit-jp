@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
@@ -69,3 +70,27 @@ export const guest = pgTable("guest", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 })
+
+export const image = pgTable("image", {
+  id: text("id").primaryKey(),
+  fileName: text("file_name"),
+  url: text("url"),
+  userId: text("user_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+})
+
+
+export const userRelations = relations(user, ({ many }) => ({
+  image: many(image)
+}));
+
+export const imageRelations = relations(image, ({ one }) => ({
+  author: one(user, {
+    fields: [image.userId],
+    references: [user.id],
+  }),
+}));
