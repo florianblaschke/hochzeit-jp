@@ -19,8 +19,8 @@ export const auth = betterAuth({
       sendMagicLink: async ({ email, token, url }, request) => {
         const { data, error } = await resend.emails.send({
           from: 'Jana & Philipp <onboarding@resend.dev>',
-          to: ['florianblaschke@web.de'],
-          subject: 'Hello world',
+          to: [email],
+          subject: 'Login',
           html: loginEmail({ email, token, url }),
         });
       }
