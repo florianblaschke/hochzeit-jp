@@ -1,6 +1,6 @@
 <script lang="ts">
     import { goto } from "$app/navigation";
-    import { authClient } from "$lib/auth/client";
+    import { authClient } from "$lib/client";
     import { Button } from "../ui/button";
     import ThemeSwitcher from "./theme-switcher.svelte";
 

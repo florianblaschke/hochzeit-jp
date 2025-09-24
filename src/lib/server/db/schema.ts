@@ -12,6 +12,7 @@ export const user = pgTable("user", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
+  admin: boolean("admin").default(false),
 });
 
 export const session = pgTable("session", {
@@ -60,6 +61,7 @@ export const verification = pgTable("verification", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 });
+
 
 export const guest = pgTable("guest", {
   id: text("id").primaryKey(),

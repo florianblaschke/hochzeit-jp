@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { authClient } from "$lib/auth/client";
+    import { authClient } from "$lib/client";
     import { Button } from "$lib/components/ui/button";
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";

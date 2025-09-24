@@ -30,6 +30,8 @@
                 <div class="relative aspect-square size-40">
                     <Image
                         src={image.url ?? ""}
+                        height={40}
+                        width={40}
                         alt="Gallery image {index + 1}"
                         class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
                         loading="lazy"

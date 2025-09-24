@@ -6,13 +6,21 @@ import { Resend } from "resend";
 import { env } from "$env/dynamic/private";
 const resend = new Resend(env.RESEND)
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "../server/db";
 import { loginEmail } from "$lib/mails/login";
+import { db } from "./server/db";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+  user: {
+    additionalFields: {
+      admin: {
+        type: "boolean",
+        defaultValue: false
+      }
+    }
+  },
   emailAndPassword: { enabled: false },
   plugins: [
     magicLink({
