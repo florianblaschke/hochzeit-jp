@@ -6,7 +6,16 @@ const config = {
   // Consult https://svelte.dev/docs/kit/integrations
   // for more information about preprocessors
   preprocess: vitePreprocess(),
-  kit: { adapter: adapter() }
+  kit: {
+    adapter: adapter({
+      images: {
+        sizes: [16, 32, 48, 64, 96, 128, 256, 384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+        minimumCacheTTL: 60,
+        domains: ["*.public.blob.vercel-storage.com"],
+        formats: ["image/avif", "image/webp"]
+      }
+    })
+  }
 };
 
 export default config;

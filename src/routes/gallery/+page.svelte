@@ -1,8 +1,8 @@
 <script lang="ts">
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
-    import type { PageData } from "./$types";
     import { Image } from "@unpic/svelte";
+    import type { PageData } from "./$types";
 
     let { data }: { data: PageData } = $props();
 </script>
@@ -29,9 +29,16 @@
             {#each data.images as image, index}
                 <div class="relative aspect-square size-40">
                     <Image
+                        options={{
+                            vercel: {
+                                force: true,
+                                prefix: "_vercel",
+                            },
+                        }}
+                        height={44}
                         src={image.url ?? ""}
-                        height={40}
-                        width={40}
+                        aspectRatio={1 / 1}
+                        layout="constrained"
                         alt="Gallery image {index + 1}"
                         class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
                         loading="lazy"
