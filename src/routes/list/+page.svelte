@@ -1,17 +1,92 @@
 <script lang="ts">
-    import { superForm } from "sveltekit-superforms";
+    import { createQuery } from "@tanstack/svelte-query";
+    import {
+        Sheet,
+        SheetContent,
+        SheetDescription,
+        SheetHeader,
+        SheetTitle,
+        SheetTrigger,
+    } from "$lib/components/ui/sheet";
+    import GuestListItem from "$lib/components/guest-list-item.svelte";
+    import GuestForm from "$lib/components/guest-form.svelte";
+    import type { guest } from "$lib/server/db/schema";
+    import { type PageData } from "./$types";
+    import { buttonVariants } from "$lib/components/ui/button";
+    import { cn } from "$lib/utils";
 
-    let { data } = $props();
+    let { data }: { data: PageData } = $props();
 
-    const { form } = superForm(data.form);
+    let isSheetOpen = $state(false);
+
+    const guestsQuery = createQuery({
+        queryKey: ["guests"],
+        queryFn: async (): Promise<(typeof guest.$inferSelect)[]> => {
+            const response = await fetch("/api/guests");
+            if (!response.ok) {
+                throw new Error("Failed to fetch guests");
+            }
+            return response.json();
+        },
+        initialData: data.guests,
+    });
+
+    const closeSheet = () => {
+        isSheetOpen = false;
+    };
 </script>
 
-<form method="POST">
-    <label for="name">Name</label>
-    <input type="text" name="name" bind:value={$form.name} />
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-3xl font-bold">Guest List</h1>
 
-    <label for="email">E-mail</label>
-    <input type="email" name="email" bind:value={$form.email} />
+        <Sheet bind:open={isSheetOpen}>
+            <SheetTrigger class={cn(buttonVariants({ variant: "default" }))}
+                >Add Guest</SheetTrigger
+            >
 
-    <div><button>Submit</button></div>
-</form>
+            <SheetContent side="right" class="w-[400px] sm:w-[540px]">
+                <SheetHeader>
+                    <SheetTitle>Add New Guest</SheetTitle>
+                    <SheetDescription>
+                        Add a new guest to your wedding list by entering their
+                        email address.
+                    </SheetDescription>
+                </SheetHeader>
+
+                <div class="mt-6">
+                    <GuestForm onSuccess={closeSheet} />
+                </div>
+            </SheetContent>
+        </Sheet>
+    </div>
+
+    {#if $guestsQuery.isLoading}
+        <div class="flex justify-center items-center py-12">
+            <div class="text-gray-500">Loading guests...</div>
+        </div>
+    {:else if $guestsQuery.error}
+        <div class="bg-red-50 border border-red-200 rounded-md p-4">
+            <div class="text-destructive">
+                Error loading guests: {$guestsQuery.error.message}
+            </div>
+        </div>
+    {:else if $guestsQuery.data && $guestsQuery.data.length === 0}
+        <div class="text-center py-12">
+            <div class="text-muted-foreground mb-4">No guests added yet</div>
+            <p class="text-sm text-muted-foreground">
+                Click "Add Guest" to get started
+            </p>
+        </div>
+    {:else if $guestsQuery.data}
+        <ul class="space-y-3">
+            {#each $guestsQuery.data as guestItem (guestItem.id)}
+                <GuestListItem guest={guestItem} />
+            {/each}
+        </ul>
+
+        <div class="mt-6 text-sm text-muted-foreground text-center">
+            Total guests: {$guestsQuery.data.length}
+        </div>
+    {/if}
+</div>

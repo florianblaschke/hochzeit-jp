@@ -1,15 +1,16 @@
-import { superValidate } from 'sveltekit-superforms';
-import { zod4 } from 'sveltekit-superforms/adapters';
-import { z } from 'zod';
+import { env } from '$env/dynamic/private';
+import { db } from '$lib/server/db';
+import { guest } from '$lib/server/db/schema';
+import { redirect } from '@sveltejs/kit';
 
-// Define outside the load function so the adapter can be cached
-const guestSchema = z.object({
-  name: z.string(),
-  email: z.email()
-});
+export const load = async ({ locals }) => {
+  if (locals.user?.email !== env.ADMIN_EMAIL) {
+    redirect(307, "/")
+  }
 
-export const load = async () => {
-  const form = await superValidate(zod4(guestSchema));
+  const guests = await db.select().from(guest);
 
-  return { form };
+  return {
+    guests
+  };
 };
