@@ -3,9 +3,11 @@
     import { cn } from "$lib/utils";
     import { Image } from "@unpic/svelte/base";
     import type { PageData } from "./$types";
-    import { dev } from "$app/environment";
+    import { building, dev } from "$app/environment";
 
     import { transform } from "unpic/providers/vercel";
+
+    const shouldOptimize = $derived(!dev && !building);
 
     let { data }: { data: PageData } = $props();
 </script>
@@ -31,7 +33,7 @@
         <div class="flex gap-1" style="flex-wrap: wrap;">
             {#each data.images as image, index}
                 <div class="relative aspect-square size-40">
-                    {#if dev}
+                    {#if !shouldOptimize}
                         <img
                             src={image.url ?? ""}
                             alt="Gallery image {index + 1}"
