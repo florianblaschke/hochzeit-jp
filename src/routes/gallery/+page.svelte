@@ -1,13 +1,8 @@
 <script lang="ts">
+    import Image from "$lib/components/custom/image.svelte";
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
-    import { Image } from "@unpic/svelte/base";
     import type { PageData } from "./$types";
-    import { building, dev } from "$app/environment";
-
-    import { transform } from "unpic/providers/vercel";
-
-    const shouldOptimize = $derived(!dev && !building);
 
     let { data }: { data: PageData } = $props();
 </script>
@@ -33,25 +28,13 @@
         <div class="flex gap-1" style="flex-wrap: wrap;">
             {#each data.images as image, index}
                 <div class="relative aspect-square size-40">
-                    {#if !shouldOptimize}
-                        <img
-                            src={image.url ?? ""}
-                            alt="Gallery image {index + 1}"
-                            class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
-                            loading="lazy"
-                        />
-                    {:else}
-                        <Image
-                            transformer={transform}
-                            height={44}
-                            src={image.url ?? ""}
-                            aspectRatio={1 / 1}
-                            layout="constrained"
-                            alt="Gallery image {index + 1}"
-                            class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
-                            loading="lazy"
-                        />
-                    {/if}
+                    <Image
+                        height={44}
+                        src={image.url ?? ""}
+                        alt="Gallery image {index + 1}"
+                        class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
+                        loading="lazy"
+                    />
                 </div>
             {/each}
         </div>
