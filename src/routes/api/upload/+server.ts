@@ -1,23 +1,22 @@
-import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
-import { json } from '@sveltejs/kit';
-import type { RequestHandler } from './$types';
 import { env } from '$env/dynamic/private';
 import { db } from '$lib/server/db';
 import { image } from '$lib/server/db/schema';
+import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
+import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
-  if (!locals.user) {
-    return json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
   try {
     const jsonResponse = await handleUpload({
       body: await request.json() as HandleUploadBody,
       request,
       token: env.BLOB_READ_WRITE_TOKEN,
       onBeforeGenerateToken: async () => {
+        if (!locals.user) {
+          throw new Error("unauthorized")
+        }
+
         return {
-          callbackUrl: "https://hochzeit-jp.vercel.app",
+          callbackUrl: env.VERCEL_BLOB_CALLBACK_URL,
           allowedContentTypes: [
             'image/jpeg',
             'image/png',
@@ -33,16 +32,16 @@ export const POST: RequestHandler = async ({ request, locals }) => {
           ],
           addRandomSuffix: true,
           maxSize: 250 * 1024 * 1024, // 250MB
+          tokenPayload: locals.user.id
         };
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {
-
         try {
           await db.insert(image).values({
             id: crypto.randomUUID(),
             url: blob.url,
             fileName: blob.pathname,
-            userId: locals.user?.id,
+            userId: tokenPayload,
           });
         } catch (error) {
           throw new Error("failed_db_entry")
