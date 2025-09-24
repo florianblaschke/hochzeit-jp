@@ -17,6 +17,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
       token: env.BLOB_READ_WRITE_TOKEN,
       onBeforeGenerateToken: async () => {
         return {
+          callbackUrl: "https://hochzeit-jp.vercel.app",
           allowedContentTypes: [
             'image/jpeg',
             'image/png',
