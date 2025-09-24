@@ -1,8 +1,11 @@
 <script lang="ts">
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
-    import { Image } from "@unpic/svelte";
+    import { Image } from "@unpic/svelte/base";
     import type { PageData } from "./$types";
+    import { dev } from "$app/environment";
+
+    import { transform } from "unpic/providers/vercel";
 
     let { data }: { data: PageData } = $props();
 </script>
@@ -28,21 +31,25 @@
         <div class="flex gap-1" style="flex-wrap: wrap;">
             {#each data.images as image, index}
                 <div class="relative aspect-square size-40">
-                    <Image
-                        options={{
-                            vercel: {
-                                force: true,
-                                prefix: "_vercel",
-                            },
-                        }}
-                        height={44}
-                        src={image.url ?? ""}
-                        aspectRatio={1 / 1}
-                        layout="constrained"
-                        alt="Gallery image {index + 1}"
-                        class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
-                        loading="lazy"
-                    />
+                    {#if dev}
+                        <img
+                            src={image.url ?? ""}
+                            alt="Gallery image {index + 1}"
+                            class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
+                            loading="lazy"
+                        />
+                    {:else}
+                        <Image
+                            transformer={transform}
+                            height={44}
+                            src={image.url ?? ""}
+                            aspectRatio={1 / 1}
+                            layout="constrained"
+                            alt="Gallery image {index + 1}"
+                            class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
+                            loading="lazy"
+                        />
+                    {/if}
                 </div>
             {/each}
         </div>
