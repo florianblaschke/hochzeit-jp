@@ -9,6 +9,10 @@ const config = {
   kit: {
     adapter: adapter({
       images: {
+        remotePatterns: [{
+          "protocol": "https",
+          "hostname": "fg2wsnyw74j1a78y.public.blob.vercel-storage.com",
+        }],
         sizes: [640, 828, 1200, 1920, 3840],
         minimumCacheTTL: 300,
         domains: ["hochzeit-jp.vercel.app"],
