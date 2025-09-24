@@ -2,6 +2,7 @@
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
     import type { PageData } from "./$types";
+    import { Image } from "@unpic/svelte";
 
     let { data }: { data: PageData } = $props();
 </script>
@@ -27,8 +28,8 @@
         <div class="flex gap-1" style="flex-wrap: wrap;">
             {#each data.images as image, index}
                 <div class="relative aspect-square size-40">
-                    <img
-                        src={image.url}
+                    <Image
+                        src={image.url ?? ""}
                         alt="Gallery image {index + 1}"
                         class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
                         loading="lazy"
