@@ -1,11 +1,12 @@
 <script lang="ts">
-    import { optimize, optimizeSingle } from "$lib/hooks/optimize";
+    import { optimize } from "$lib/hooks/optimize";
     import type { Component } from "svelte";
     import type { HTMLImgAttributes } from "svelte/elements";
+    import { SIZES } from "../../utils";
 
     type ImageProps = HTMLImgAttributes;
 
     let { src, srcset, ...props }: ImageProps = $props();
 </script>
 
-<img src={optimizeSingle(src ?? "")} srcset={optimize(src ?? "")} {...props} />
+<img src={optimize(src)} srcset={optimize(src, SIZES)} {...props} />

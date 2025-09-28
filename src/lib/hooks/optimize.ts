@@ -1,6 +1,10 @@
 import { building, dev } from "$app/environment";
 
-export function optimize(src: string, widths = [640, 960, 1280], quality = 90) {
+export function optimize(src: string | null | undefined, widths = [640, 960, 1280], quality = 90) {
+  if (!src) {
+    return ""
+  }
+
   if (dev || building) { return src };
 
   return widths
@@ -12,10 +16,4 @@ export function optimize(src: string, widths = [640, 960, 1280], quality = 90) {
       return url + descriptor;
     })
     .join(', ');
-}
-
-export function optimizeSingle(src: string, width = 640, quality = 90) {
-  if (dev || building) { return src };
-
-  return `/_vercel/image?url=${src}&w=${width}&q=${quality}`;
 }
