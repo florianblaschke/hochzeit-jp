@@ -3,7 +3,8 @@ import Image from "./components/custom/image.svelte"
 import { SIZES } from "./utils"
 
 
+
 export {
   Image,
-  SIZES
+  SIZES,
 }

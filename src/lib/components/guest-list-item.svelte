@@ -1,7 +1,19 @@
 <script lang="ts">
-    import { createMutation, useQueryClient } from "@tanstack/svelte-query";
     import type { guest as guestSchema } from "$lib/server/db/schema";
-    import { Button } from "./ui/button";
+    import { cn } from "$lib/utils";
+    import { createMutation, useQueryClient } from "@tanstack/svelte-query";
+    import {
+        AlertDialog,
+        AlertDialogAction,
+        AlertDialogCancel,
+        AlertDialogContent,
+        AlertDialogDescription,
+        AlertDialogFooter,
+        AlertDialogHeader,
+        AlertDialogTitle,
+        AlertDialogTrigger,
+    } from "./ui/alert-dialog/index";
+    import { buttonVariants } from "./ui/button";
 
     interface Props {
         guest: typeof guestSchema.$inferSelect;
@@ -29,13 +41,7 @@
     });
 
     const handleDelete = () => {
-        if (
-            confirm(
-                `Are you sure you want to delete guest with email: ${guest.email}?`,
-            )
-        ) {
-            $deleteMutation.mutate(guest.id);
-        }
+        $deleteMutation.mutate(guest.id);
     };
 </script>
 
@@ -54,13 +60,27 @@
             </p>
         {/if}
     </div>
-
-    <Button
-        type="button"
-        onclick={handleDelete}
-        disabled={$deleteMutation.isPending}
-        variant="destructive"
-    >
-        {$deleteMutation.isPending ? "Deleting..." : "Delete"}
-    </Button>
+    <AlertDialog>
+        <AlertDialogTrigger
+            class={cn(buttonVariants({ variant: "destructive" }))}
+        >
+            {$deleteMutation.isPending ? "Deleting..." : "Delete"}
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+            <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                    Are you sure you want to delete guest with email: {guest.email}?
+                    This action cannot be undone.
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                    class={cn(buttonVariants({ variant: "destructive" }))}
+                    onclick={handleDelete}>Delete</AlertDialogAction
+                >
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
 </li>
