@@ -1,12 +1,13 @@
 <script lang="ts">
-    import "../app.css";
-    import favicon from "$lib/assets/favicon.svg";
-    import { ModeWatcher } from "mode-watcher";
-    import Navbar from "$lib/components/custom/navbar.svelte";
     import { browser } from "$app/environment";
+    import favicon from "$lib/assets/favicon.svg";
+    import Navbar from "$lib/components/custom/navbar.svelte";
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
+    import { ModeWatcher } from "mode-watcher";
+    import "../app.css";
+    import type { LayoutProps } from "./$types";
 
-    let { children } = $props();
+    let { children, data }: LayoutProps = $props();
 
     const queryClient = new QueryClient({
         defaultOptions: {
@@ -23,6 +24,6 @@
 
 <QueryClientProvider client={queryClient}>
     <ModeWatcher />
-    <Navbar />
+    <Navbar isAdmin={data.isAdmin} />
     {@render children?.()}
 </QueryClientProvider>

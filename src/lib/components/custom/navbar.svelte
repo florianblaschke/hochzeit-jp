@@ -5,6 +5,8 @@
     import ThemeSwitcher from "./theme-switcher.svelte";
 
     let session = authClient.useSession();
+
+    let { isAdmin }: { isAdmin: boolean } = $props();
 </script>
 
 <header class="border-b border-border w-full">
@@ -13,6 +15,9 @@
             <a href="/" class="font-bold text-lg"> JP Wedding </a>
             {#if $session.data}
                 <a href="/gallery">Gallerie</a>
+            {/if}
+            {#if isAdmin}
+                <a href="/list">Guest List</a>
             {/if}
         </div>
         <div class="flex-1 flex justify-end gap-4">
