@@ -1,13 +1,15 @@
-import { betterAuth } from "better-auth";
+import { getRequestEvent } from "$app/server";
+import { env } from "$env/dynamic/private";
+import { loginEmail } from "$lib/mails/login";
+import { APIError, betterAuth } from "better-auth";
+import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { magicLink } from "better-auth/plugins";
 import { sveltekitCookies } from "better-auth/svelte-kit";
-import { getRequestEvent } from "$app/server";
+import { eq } from "drizzle-orm";
 import { Resend } from "resend";
-import { env } from "$env/dynamic/private";
-const resend = new Resend(env.RESEND)
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { loginEmail } from "$lib/mails/login";
 import { db } from "./server/db";
+import { guest } from "./server/db/schema";
+const resend = new Resend(env.RESEND)
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -24,13 +26,28 @@ export const auth = betterAuth({
   emailAndPassword: { enabled: false },
   plugins: [
     magicLink({
-      sendMagicLink: async ({ email, token, url }, request) => {
+      sendMagicLink: async ({ email, token, url }) => {
+        if (email !== env.ADMIN_EMAIL) {
+          const result = await db.selectDistinct().from(guest).where(eq(guest.email, email))
+          if (!result.length) {
+            throw new APIError("UNAUTHORIZED", {
+              message: "We could not find you on the guest list."
+            })
+          }
+        }
+
         const { data, error } = await resend.emails.send({
           from: 'Jana & Philipp <onboarding@resend.dev>',
           to: [email],
           subject: 'Login',
           html: loginEmail({ email, token, url }),
         });
+
+        if (error) {
+          throw new APIError("BAD_REQUEST", {
+            message: "The verification Email could not be send. Please try again."
+          })
+        }
       }
     }),
     sveltekitCookies(getRequestEvent)

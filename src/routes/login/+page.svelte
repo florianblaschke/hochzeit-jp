@@ -12,18 +12,22 @@
     let loginMutation = createMutation({
         mutationKey: ["login"],
         mutationFn: async () => {
-            const { data, error } = await authClient.signIn.magicLink({
+            const { error } = await authClient.signIn.magicLink({
                 email: email.trim(),
             });
 
             if (error) {
-                throw new Error("Failed to send magic link. Please try again.");
+                errorMessage = error.message ?? "Something went wrong…";
+                throw new Error("unauthorized");
             }
         },
     });
 
+    console.log($loginMutation.error);
+
     async function handleSubmit(event: Event) {
         event.preventDefault();
+        errorMessage = "";
 
         if (!email.trim()) {
             errorMessage = "Please enter your email address";
