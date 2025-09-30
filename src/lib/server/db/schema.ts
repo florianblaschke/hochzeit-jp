@@ -62,10 +62,9 @@ export const verification = pgTable("verification", {
     .notNull(),
 });
 
-
-export const guest = pgTable("guest", {
+export const appendix = pgTable("appendix", {
   id: text("id").primaryKey(),
-  email: text("email").notNull().unique(),
+  name: text("name").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -87,7 +86,8 @@ export const image = pgTable("image", {
 
 
 export const userRelations = relations(user, ({ many }) => ({
-  image: many(image)
+  image: many(image),
+  appendix: many(appendix)
 }));
 
 export const imageRelations = relations(image, ({ one }) => ({

@@ -1,6 +1,6 @@
-import { json } from '@sveltejs/kit';
 import { db } from '$lib/server/db';
-import { guest } from '$lib/server/db/schema';
+import { user } from '$lib/server/db/schema';
+import { json } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import type { RequestHandler } from './$types';
 
@@ -13,8 +13,8 @@ export const DELETE: RequestHandler = async ({ params }) => {
     }
 
     const deletedGuest = await db
-      .delete(guest)
-      .where(eq(guest.id, id))
+      .delete(user)
+      .where(eq(user.id, id))
       .returning();
 
     if (deletedGuest.length === 0) {

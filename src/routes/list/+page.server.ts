@@ -1,6 +1,5 @@
 import { env } from '$env/dynamic/private';
-import { db } from '$lib/server/db';
-import { guest } from '$lib/server/db/schema';
+import { getAllUsers } from '$lib/queries/user';
 import { redirect } from '@sveltejs/kit';
 
 export const load = async ({ locals }) => {
@@ -8,7 +7,7 @@ export const load = async ({ locals }) => {
     redirect(307, "/")
   }
 
-  const guests = await db.select().from(guest);
+  const guests = await getAllUsers()
 
   return {
     guests

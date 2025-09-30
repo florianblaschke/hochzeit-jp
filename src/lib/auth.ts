@@ -8,7 +8,7 @@ import { sveltekitCookies } from "better-auth/svelte-kit";
 import { eq } from "drizzle-orm";
 import { Resend } from "resend";
 import { db } from "./server/db";
-import { guest } from "./server/db/schema";
+import { user } from "./server/db/schema";
 const resend = new Resend(env.RESEND)
 
 export const auth = betterAuth({
@@ -28,7 +28,7 @@ export const auth = betterAuth({
     magicLink({
       sendMagicLink: async ({ email, token, url }) => {
         if (email !== env.ADMIN_EMAIL) {
-          const result = await db.selectDistinct().from(guest).where(eq(guest.email, email))
+          const result = await db.selectDistinct().from(user).where(eq(user.email, email))
           if (!result.length) {
             throw new APIError("UNAUTHORIZED", {
               message: "We could not find you on the guest list."

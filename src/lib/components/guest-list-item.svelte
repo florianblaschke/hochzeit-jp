@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { guest as guestSchema } from "$lib/server/db/schema";
     import { cn } from "$lib/utils";
     import { createMutation, useQueryClient } from "@tanstack/svelte-query";
     import {
@@ -14,12 +13,9 @@
         AlertDialogTrigger,
     } from "./ui/alert-dialog/index";
     import { buttonVariants } from "./ui/button";
+    import type { User } from "better-auth";
 
-    interface Props {
-        guest: typeof guestSchema.$inferSelect;
-    }
-
-    let { guest }: Props = $props();
+    let { guest }: { guest: User } = $props();
 
     const queryClient = useQueryClient();
 
