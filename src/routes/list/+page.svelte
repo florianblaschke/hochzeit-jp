@@ -9,11 +9,10 @@
         SheetTrigger,
     } from "$lib/components/ui/sheet";
     import GuestListItem from "$lib/components/guest-list-item.svelte";
-    import GuestForm from "$lib/components/guest-form.svelte";
-    import type { guest } from "$lib/server/db/schema";
     import { type PageData } from "./$types";
     import { buttonVariants } from "$lib/components/ui/button";
     import { cn } from "$lib/utils";
+    import GuestForm from "./guest-form.svelte";
 
     let { data }: { data: PageData } = $props();
 
@@ -21,7 +20,7 @@
 
     const guestsQuery = createQuery({
         queryKey: ["guests"],
-        queryFn: async (): Promise<(typeof guest.$inferSelect)[]> => {
+        queryFn: async () => {
             const response = await fetch("/api/guests");
             if (!response.ok) {
                 throw new Error("Failed to fetch guests");
@@ -55,7 +54,7 @@
                 </SheetHeader>
 
                 <div class="mt-6">
-                    <GuestForm onSuccess={closeSheet} />
+                    <GuestForm onSuccess={closeSheet} form={data.form} />
                 </div>
             </SheetContent>
         </Sheet>

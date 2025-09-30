@@ -26,6 +26,9 @@ importers:
       resend:
         specifier: ^6.1.0
         version: 6.1.0
+      zod:
+        specifier: ^3.25.67
+        version: 3.25.76
     devDependencies:
       '@biomejs/biome':
         specifier: 2.2.4
@@ -3737,7 +3740,6 @@ snapshots:
       zod: 3.25.76
     optional: true
 
-  zod@3.25.76:
-    optional: true
+  zod@3.25.76: {}
 
   zod@4.1.11: {}
