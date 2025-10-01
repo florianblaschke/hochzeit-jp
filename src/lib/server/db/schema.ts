@@ -62,16 +62,6 @@ export const verification = pgTable("verification", {
     .notNull(),
 });
 
-export const appendix = pgTable("appendix", {
-  id: text("id").primaryKey(),
-  name: text("name").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
-    .notNull(),
-})
-
 export const image = pgTable("image", {
   id: text("id").primaryKey(),
   fileName: text("file_name"),
@@ -84,15 +74,37 @@ export const image = pgTable("image", {
     .notNull(),
 })
 
+export const rsvp = pgTable("rsvp", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .unique()
+    .references(() => user.id, { onDelete: "cascade" }),
+  attending: boolean("attending").notNull(),
+  message: text("message"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at")
+    .defaultNow()
+    .$onUpdate(() => /* @__PURE__ */ new Date())
+    .notNull(),
+})
 
-export const userRelations = relations(user, ({ many }) => ({
+
+export const userRelations = relations(user, ({ many, one }) => ({
   image: many(image),
-  appendix: many(appendix)
+  rsvp: one(rsvp)
 }));
 
 export const imageRelations = relations(image, ({ one }) => ({
   author: one(user, {
     fields: [image.userId],
+    references: [user.id],
+  }),
+}));
+
+export const rsvpRelations = relations(rsvp, ({ one }) => ({
+  user: one(user, {
+    fields: [rsvp.userId],
     references: [user.id],
   }),
 }));
