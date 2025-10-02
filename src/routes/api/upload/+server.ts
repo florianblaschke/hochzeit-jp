@@ -40,6 +40,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
           await db.insert(image).values({
             id: crypto.randomUUID(),
             url: blob.url,
+            type: blob.contentType,
             fileName: blob.pathname,
             userId: tokenPayload,
           });

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Image from "$lib/components/custom/image.svelte";
+    import Video from "$lib/components/custom/video.svelte";
     import { buttonVariants } from "$lib/components/ui/button";
     import {
         Carousel,
@@ -45,7 +46,6 @@
 <div class="container mx-auto px-4 py-8">
     <div class="mb-8 flex items-center justify-between">
         <h1 class="text-3xl font-bold mb-2">Gallery</h1>
-        <p class="text-muted-foreground">View all uploaded images</p>
         <a href="/upload" class={cn(buttonVariants({ variant: "link" }))}>
             Upload images
         </a>
@@ -56,24 +56,30 @@
             <p class="text-muted-foreground text-lg">No images found</p>
         </div>
     {:else}
-        <div class="flex gap-1" style="flex-wrap: wrap;">
-            {#each data.images as image, index}
+        <div class="flex gap-px md:gap-1" style="flex-wrap: wrap;">
+            {#each data.images as media, index}
                 <button
                     type="button"
-                    class="relative aspect-square size-40"
-                    onclick={() => {
+                    class="relative aspect-square basis-1/2 md:basis-1/4 max-w-[49%] md:max-w-[24.5%]"
+                    onclick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         currentIndex = index;
                         isOpen = true;
                     }}
-                    aria-label="Open image {index + 1}"
+                    aria-label="Open image/video {index + 1}"
                 >
-                    <Image
-                        height={44}
-                        src={image.url ?? ""}
-                        alt="Gallery image {index + 1}"
-                        class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
-                        loading="lazy"
-                    />
+                    {#if media.type.startsWith("video/")}
+                        <Video src={media} className="aspect-square" />
+                    {:else}
+                        <Image
+                            height={44}
+                            src={media.url ?? ""}
+                            alt="Gallery image {index + 1}"
+                            class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
+                            loading="lazy"
+                        />
+                    {/if}
                 </button>
             {/each}
         </div>
@@ -87,16 +93,20 @@
                     class="w-screen h-screen"
                 >
                     <CarouselContent class="h-screen">
-                        {#each data.images as image, i}
+                        {#each data.images as media, i}
                             <CarouselItem
                                 class="h-screen flex items-center justify-center"
                             >
-                                <Image
-                                    src={image.url ?? ""}
-                                    alt="Gallery image {i + 1}"
-                                    class="max-w-full max-h-screen object-contain select-none"
-                                    draggable="false"
-                                />
+                                {#if media.type.startsWith("video/")}
+                                    <Video src={media} />
+                                {:else}
+                                    <Image
+                                        src={media.url ?? ""}
+                                        alt="Gallery image {i + 1}"
+                                        class="max-w-full max-h-screen object-contain select-none"
+                                        draggable="false"
+                                    />
+                                {/if}
                             </CarouselItem>
                         {/each}
                     </CarouselContent>

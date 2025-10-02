@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, text, timestamp, boolean } from "drizzle-orm/pg-core";
+import { pgTable, text, timestamp, boolean, pgEnum, varchar } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
   id: text("id").primaryKey(),
@@ -65,6 +65,7 @@ export const verification = pgTable("verification", {
 export const image = pgTable("image", {
   id: text("id").primaryKey(),
   fileName: text("file_name"),
+  type: text("type").notNull(),
   url: text("url"),
   userId: text("user_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -108,3 +109,6 @@ export const rsvpRelations = relations(rsvp, ({ one }) => ({
     references: [user.id],
   }),
 }));
+
+
+export type Media = typeof image.$inferSelect
