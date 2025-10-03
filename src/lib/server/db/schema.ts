@@ -62,12 +62,12 @@ export const verification = pgTable("verification", {
     .notNull(),
 });
 
-export const image = pgTable("image", {
+export const media = pgTable("media", {
   id: text("id").primaryKey(),
   fileName: text("file_name"),
   type: text("type").notNull(),
-  thumbnail: text("thumbnail"),
-  url: text("url"),
+  thumbnailUrl: text("thumbnail_url"),
+  mediaUrl: text("media_url"),
   userId: text("user_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
@@ -93,13 +93,13 @@ export const rsvp = pgTable("rsvp", {
 
 
 export const userRelations = relations(user, ({ many, one }) => ({
-  image: many(image),
+  image: many(media),
   rsvp: one(rsvp)
 }));
 
-export const imageRelations = relations(image, ({ one }) => ({
+export const mediaRelations = relations(media, ({ one }) => ({
   author: one(user, {
-    fields: [image.userId],
+    fields: [media.userId],
     references: [user.id],
   }),
 }));
@@ -112,4 +112,4 @@ export const rsvpRelations = relations(rsvp, ({ one }) => ({
 }));
 
 
-export type Media = typeof image.$inferSelect
+export type Media = typeof media.$inferSelect

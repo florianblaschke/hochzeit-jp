@@ -74,7 +74,7 @@
                     {:else}
                         <Image
                             height={44}
-                            src={media.url ?? ""}
+                            src={media.mediaUrl ?? ""}
                             alt="Gallery image {index + 1}"
                             class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
                             loading="lazy"
@@ -101,7 +101,7 @@
                                     <Video src={media} />
                                 {:else}
                                     <Image
-                                        src={media.url ?? ""}
+                                        src={media.mediaUrl ?? ""}
                                         alt="Gallery image {i + 1}"
                                         class="max-w-full max-h-screen object-contain select-none"
                                         draggable="false"

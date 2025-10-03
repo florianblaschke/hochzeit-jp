@@ -159,6 +159,7 @@
             try {
                 const response = await upload(name, props.file, {
                     clientPayload: JSON.stringify({
+                        id: props.id,
                         isThumbnail: props.isThumbnail,
                     }),
                     access: "public",

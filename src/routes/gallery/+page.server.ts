@@ -1,5 +1,5 @@
 import { db } from "$lib/server/db";
-import { image } from "$lib/server/db/schema";
+import { media } from "$lib/server/db/schema";
 import { redirect } from "@sveltejs/kit";
 
 export const load = async ({ locals }) => {
@@ -7,7 +7,7 @@ export const load = async ({ locals }) => {
     redirect(307, "/login")
   }
 
-  const images = await db.select().from(image)
+  const images = await db.select().from(media)
 
   return {
     images

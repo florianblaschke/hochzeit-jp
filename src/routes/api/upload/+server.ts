@@ -1,22 +1,27 @@
 import { env } from '$env/dynamic/private';
 import { db } from '$lib/server/db';
-import { image } from '$lib/server/db/schema';
+import { media } from '$lib/server/db/schema';
+import { eq } from 'drizzle-orm';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import type { RequestHandler } from './$types';
 
-type TokenPayload = { id: string, userId: string, isThumbnail: string | undefined }
+type TokenPayload = {
+  userId: string,
+  fileInfo?: {
+    id: string,
+    isThumbnail?: boolean
+  }
+}
 
 export const POST: RequestHandler = async ({ request, locals }) => {
   try {
     const body = await request.json() as HandleUploadBody
 
-    console.log(body)
-
     const jsonResponse = await handleUpload({
       body,
       request,
       token: env.BLOB_READ_WRITE_TOKEN,
-      onBeforeGenerateToken: async () => {
+      onBeforeGenerateToken: async (pathname, clientPayload) => {
         if (!locals.user) {
           throw new Error("unauthorized")
         }
@@ -38,30 +43,78 @@ export const POST: RequestHandler = async ({ request, locals }) => {
           ],
           addRandomSuffix: true,
           maxSize: 250 * 1024 * 1024, // 250MB
-          tokenPayload: JSON.stringify({ userId: locals.user.id })
+          tokenPayload: JSON.stringify({
+            userId: locals.user.id,
+            fileInfo: clientPayload ? JSON.parse(clientPayload) : undefined
+          } as TokenPayload)
         };
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {
-        const { id, isThumbnail, userId } = JSON.parse(tokenPayload ?? "") as TokenPayload
+        const payload = JSON.parse(tokenPayload ?? "{}") as TokenPayload
+        const { userId, fileInfo } = payload
+
+        if (!fileInfo?.id) {
+          throw new Error("ID is required from client")
+        }
+
+        const { id, isThumbnail } = fileInfo
+
         try {
           if (isThumbnail) {
+            // Check if the video entry exists
+            const existing = await db.select().from(media)
+              .where(eq(media.id, fileInfo.id))
+              .limit(1)
 
-            db.insert(image).values({
-              id,
-              url: blob.url,
-              type: blob.contentType,
-              fileName: blob.pathname,
-              userId,
-            })
+            console.log("EXISTING", existing)
+
+            if (existing.length) {
+              console.log("THUMB: UPDATING ENTRY")
+              // Video exists, update it with thumbnail URL
+              await db.update(media)
+                .set({ thumbnailUrl: blob.url })
+                .where(eq(media.id, fileInfo.id))
+            } else {
+              console.log("THUMB: CREATING ENTRY")
+              // Video doesn't exist yet, create placeholder entry with thumbnail
+              await db.insert(media).values({
+                id,
+                mediaUrl: null,
+                type: 'video/pending', // Placeholder type
+                fileName: null,
+                userId,
+                thumbnailUrl: blob.url,
+              });
+            }
+          } else {
+            // Handle video or regular image upload
+            // Check if this is completing a thumbnail-first upload
+            const existing = await db.select().from(media)
+              .where(eq(media.id, id))
+              .limit(1)
+
+            console.log("NO THUMB: EXISTING", existing)
+
+            if (existing.length) {
+              console.log("NO THUMB: EXISTING TRUE", existing)
+              await db.update(media)
+                .set({
+                  mediaUrl: blob.url,
+                  type: blob.contentType,
+                  fileName: blob.pathname,
+                })
+                .where(eq(media.id, id))
+            } else {
+              console.log("NO THUMB: EXISTING FALSE", existing)
+              await db.insert(media).values({
+                id,
+                mediaUrl: blob.url,
+                type: blob.contentType,
+                fileName: blob.pathname,
+                userId,
+              });
+            }
           }
-
-          await db.insert(image).values({
-            id,
-            url: blob.url,
-            type: blob.contentType,
-            fileName: blob.pathname,
-            userId,
-          });
         } catch (error) {
           throw new Error("failed_db_entry")
         }
