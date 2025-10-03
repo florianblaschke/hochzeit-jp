@@ -4,10 +4,16 @@ import { image } from '$lib/server/db/schema';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import type { RequestHandler } from './$types';
 
+type TokenPayload = { id: string, userId: string, isThumbnail: string | undefined }
+
 export const POST: RequestHandler = async ({ request, locals }) => {
   try {
+    const body = await request.json() as HandleUploadBody
+
+    console.log(body)
+
     const jsonResponse = await handleUpload({
-      body: await request.json() as HandleUploadBody,
+      body,
       request,
       token: env.BLOB_READ_WRITE_TOKEN,
       onBeforeGenerateToken: async () => {
@@ -32,17 +38,29 @@ export const POST: RequestHandler = async ({ request, locals }) => {
           ],
           addRandomSuffix: true,
           maxSize: 250 * 1024 * 1024, // 250MB
-          tokenPayload: locals.user.id
+          tokenPayload: JSON.stringify({ userId: locals.user.id })
         };
       },
       onUploadCompleted: async ({ blob, tokenPayload }) => {
+        const { id, isThumbnail, userId } = JSON.parse(tokenPayload ?? "") as TokenPayload
         try {
+          if (isThumbnail) {
+
+            db.insert(image).values({
+              id,
+              url: blob.url,
+              type: blob.contentType,
+              fileName: blob.pathname,
+              userId,
+            })
+          }
+
           await db.insert(image).values({
-            id: crypto.randomUUID(),
+            id,
             url: blob.url,
             type: blob.contentType,
             fileName: blob.pathname,
-            userId: tokenPayload,
+            userId,
           });
         } catch (error) {
           throw new Error("failed_db_entry")

@@ -66,6 +66,7 @@ export const image = pgTable("image", {
   id: text("id").primaryKey(),
   fileName: text("file_name"),
   type: text("type").notNull(),
+  thumbnail: text("thumbnail"),
   url: text("url"),
   userId: text("user_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),

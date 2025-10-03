@@ -11,6 +11,7 @@
         X,
     } from "@lucide/svelte";
     import { upload } from "@vercel/blob/client";
+    import { createThumbnail } from "$lib/hooks/create-thumbnail";
 
     type Status = "pending" | "uploading" | "success" | "error";
     let fileInput: HTMLInputElement;
@@ -20,10 +21,12 @@
         new SvelteMap<
             string,
             {
+                id: string;
                 file: File;
                 status: Status;
                 progress: number;
                 controller: AbortController;
+                isThumbnail?: boolean;
             }
         >(),
     );
@@ -57,25 +60,25 @@
         e.preventDefault();
     }
 
-    function handleDrop(e: DragEvent) {
+    async function handleDrop(e: DragEvent) {
         e.preventDefault();
         dragActive = false;
 
         if (e.dataTransfer?.files) {
             const droppedFiles = Array.from(e.dataTransfer.files);
-            addFiles(droppedFiles);
+            await addFiles(droppedFiles);
         }
     }
 
-    function handleFileSelect(e: Event) {
+    async function handleFileSelect(e: Event) {
         const target = e.target as HTMLInputElement;
         if (target.files) {
             const selectedFiles = Array.from(target.files);
-            addFiles(selectedFiles);
+            await addFiles(selectedFiles);
         }
     }
 
-    function addFiles(newFiles: File[]) {
+    async function addFiles(newFiles: File[]) {
         const validFiles = newFiles.filter((file) => {
             if (!ACCEPTED_TYPES.includes(file.type)) {
                 alert(`File ${file.name} is not a supported format`);
@@ -90,7 +93,31 @@
 
         // Initialize status for new files
         for (const file of validFiles) {
+            const id = crypto.randomUUID();
+            if (file.type.startsWith("video/")) {
+                try {
+                    const thumbBlob = await createThumbnail(file);
+                    const thumbFile = new File(
+                        [thumbBlob],
+                        `thumbnail-${file.name.split(".")[0]}.webp`,
+                        { type: thumbBlob.type },
+                    );
+
+                    files.set(thumbFile.name, {
+                        id,
+                        file: thumbFile,
+                        status: "pending",
+                        controller: new AbortController(),
+                        progress: 0,
+                        isThumbnail: true,
+                    });
+                } catch (error) {
+                    // TODO! handle error here
+                }
+            }
+
             files.set(file.name, {
+                id,
                 file,
                 status: "pending",
                 controller: new AbortController(),
@@ -131,6 +158,9 @@
 
             try {
                 const response = await upload(name, props.file, {
+                    clientPayload: JSON.stringify({
+                        isThumbnail: props.isThumbnail,
+                    }),
                     access: "public",
                     handleUploadUrl: "/api/upload",
                     onUploadProgress: (ctx) => {
@@ -184,7 +214,7 @@
         type="file"
         multiple
         accept="image/*,video/*"
-        onchange={handleFileSelect}
+        onchange={async (f) => await handleFileSelect(f)}
         class="hidden"
     />
 
@@ -197,7 +227,7 @@
             ondragenter={handleDragEnter}
             ondragleave={handleDragLeave}
             ondragover={handleDragOver}
-            ondrop={handleDrop}
+            ondrop={async (f) => await handleDrop(f)}
             role="button"
             tabindex="0"
             onclick={openFileDialog}
@@ -241,62 +271,66 @@
 
             <div class="space-y-3">
                 {#each files as [name, { file, status, progress }] (name)}
-                    <div
-                        class="flex items-center space-x-4 p-4 border rounded-lg bg-card"
-                    >
-                        <div class="flex-shrink-0">
-                            {#if file.type.startsWith("image/")}
-                                <FileImage class="h-8 w-8 text-blue-500" />
-                            {:else}
-                                <Video class="h-8 w-8 text-purple-500" />
-                            {/if}
-                        </div>
+                    {#if name.startsWith("thumbnail-")}
+                        {null}
+                    {:else}
+                        <div
+                            class="flex items-center space-x-4 p-4 border rounded-lg bg-card"
+                        >
+                            <div class="flex-shrink-0">
+                                {#if file.type.startsWith("image/")}
+                                    <FileImage class="h-8 w-8 text-blue-500" />
+                                {:else}
+                                    <Video class="h-8 w-8 text-purple-500" />
+                                {/if}
+                            </div>
 
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium truncate">
-                                {file.name}
-                            </p>
-                            <p class="text-xs text-muted-foreground">
-                                {formatFileSize(file.size)}
-                            </p>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-medium truncate">
+                                    {file.name}
+                                </p>
+                                <p class="text-xs text-muted-foreground">
+                                    {formatFileSize(file.size)}
+                                </p>
 
-                            {#if status === "uploading"}
-                                <div class="mt-2">
-                                    <div
-                                        class="w-full bg-muted rounded-full h-2"
-                                    >
+                                {#if status === "uploading"}
+                                    <div class="mt-2">
                                         <div
-                                            class="bg-primary h-2 rounded-full transition-all duration-300"
-                                            style="width: {progress || 0}%"
-                                        ></div>
+                                            class="w-full bg-muted rounded-full h-2"
+                                        >
+                                            <div
+                                                class="bg-primary h-2 rounded-full transition-all duration-300"
+                                                style="width: {progress || 0}%"
+                                            ></div>
+                                        </div>
+                                        <p
+                                            class="text-xs text-muted-foreground mt-1"
+                                        >
+                                            Uploading... {progress || 0}%
+                                        </p>
                                     </div>
-                                    <p
-                                        class="text-xs text-muted-foreground mt-1"
-                                    >
-                                        Uploading... {progress || 0}%
-                                    </p>
-                                </div>
-                            {/if}
-                        </div>
+                                {/if}
+                            </div>
 
-                        <div class="flex items-center space-x-2">
-                            {#if status === "success"}
-                                <Check class="size-5 text-green-500" />
-                            {:else if status === "error"}
-                                <CircleAlert class="size-5 text-red-500" />
-                            {:else if status === "uploading"}
-                                <LoaderCircle class="size-5 animate-spin" />
-                            {/if}
+                            <div class="flex items-center space-x-2">
+                                {#if status === "success"}
+                                    <Check class="size-5 text-green-500" />
+                                {:else if status === "error"}
+                                    <CircleAlert class="size-5 text-red-500" />
+                                {:else if status === "uploading"}
+                                    <LoaderCircle class="size-5 animate-spin" />
+                                {/if}
 
-                            <Button
-                                variant="ghost"
-                                size="sm"
-                                onclick={() => removeFile(file)}
-                            >
-                                <X class="h-4 w-4" />
-                            </Button>
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onclick={() => removeFile(file)}
+                                >
+                                    <X class="h-4 w-4" />
+                                </Button>
+                            </div>
                         </div>
-                    </div>
+                    {/if}
                 {/each}
             </div>
         </div>
@@ -309,7 +343,12 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div>
                     <span class="text-muted-foreground">Total files:</span>
-                    <span class="font-medium ml-2">{files.size}</span>
+                    <span class="font-medium ml-2"
+                        >{files.size -
+                            Object.values(Object.fromEntries(files)).filter(
+                                (f) => f.file.type.startsWith("video/"),
+                            ).length}</span
+                    >
                 </div>
                 <div>
                     <span class="text-muted-foreground">Total size:</span>
