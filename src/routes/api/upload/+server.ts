@@ -66,16 +66,13 @@ export const POST: RequestHandler = async ({ request, locals }) => {
               .where(eq(media.id, fileInfo.id))
               .limit(1)
 
-            console.log("EXISTING", existing)
 
             if (existing.length) {
-              console.log("THUMB: UPDATING ENTRY")
               // Video exists, update it with thumbnail URL
               await db.update(media)
                 .set({ thumbnailUrl: blob.url })
                 .where(eq(media.id, fileInfo.id))
             } else {
-              console.log("THUMB: CREATING ENTRY")
               // Video doesn't exist yet, create placeholder entry with thumbnail
               await db.insert(media).values({
                 id,
@@ -93,10 +90,8 @@ export const POST: RequestHandler = async ({ request, locals }) => {
               .where(eq(media.id, id))
               .limit(1)
 
-            console.log("NO THUMB: EXISTING", existing)
 
             if (existing.length) {
-              console.log("NO THUMB: EXISTING TRUE", existing)
               await db.update(media)
                 .set({
                   mediaUrl: blob.url,
@@ -105,7 +100,6 @@ export const POST: RequestHandler = async ({ request, locals }) => {
                 })
                 .where(eq(media.id, id))
             } else {
-              console.log("NO THUMB: EXISTING FALSE", existing)
               await db.insert(media).values({
                 id,
                 mediaUrl: blob.url,
