@@ -44,7 +44,7 @@
 
 <form
     method="POST"
-    class="space-y-6 p-6 rounded-lg shadow-md max-w-md mx-auto"
+    class="space-y-6 p-6 rounded-lg shadow-md max-w-md mx-auto bg-card"
     use:enhance
 >
     <div class="text-center">
