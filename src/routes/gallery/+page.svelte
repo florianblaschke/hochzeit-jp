@@ -51,13 +51,13 @@
         </a>
     </div>
 
-    {#if data.images.length === 0}
+    {#if data.media.length === 0}
         <div class="text-center py-16">
             <p class="text-muted-foreground text-lg">No images found</p>
         </div>
     {:else}
         <div class="flex gap-px md:gap-1" style="flex-wrap: wrap;">
-            {#each data.images as media, index}
+            {#each data.media as media, index}
                 <button
                     type="button"
                     class="relative aspect-square basis-1/2 md:basis-1/4 max-w-[49%] md:max-w-[24.5%]"
@@ -69,16 +69,21 @@
                     }}
                     aria-label="Open image/video {index + 1}"
                 >
-                    {#if media.type.startsWith("video/")}
-                        <Video src={media} className="aspect-square" />
-                    {:else}
-                        <Image
-                            height={44}
-                            src={media.mediaUrl ?? ""}
-                            alt="Gallery image {index + 1}"
-                            class="w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
-                            loading="lazy"
-                        />
+                    <Image
+                        height={44}
+                        src={media.thumbnailUrl ?? media.mediaUrl}
+                        alt="Gallery image {index + 1}"
+                        class="group w-full h-full object-cover transition-transform duration-200 ease-in-out cursor-pointer hover:scale-[101%]"
+                        loading="lazy"
+                    />
+                    {#if media.thumbnailUrl}
+                        <div class="absolute inset-0 grid place-items-center">
+                            <span
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white"
+                            >
+                                ▶
+                            </span>
+                        </div>
                     {/if}
                 </button>
             {/each}
@@ -93,7 +98,7 @@
                     class="w-screen h-screen"
                 >
                     <CarouselContent class="h-screen">
-                        {#each data.images as media, i}
+                        {#each data.media as media, i}
                             <CarouselItem
                                 class="h-screen flex items-center justify-center"
                             >

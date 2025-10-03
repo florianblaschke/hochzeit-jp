@@ -7,9 +7,9 @@ export const load = async ({ locals }) => {
     redirect(307, "/login")
   }
 
-  const images = await db.select().from(media)
+  const mediaResults = await db.select().from(media)
 
   return {
-    images
+    media: mediaResults
   }
 }
