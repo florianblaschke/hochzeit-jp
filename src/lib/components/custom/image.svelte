@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { optimize } from "$lib/hooks/optimize";
+    import { optimize } from "$lib/helpers/optimize";
     import type { HTMLImgAttributes } from "svelte/elements";
     import { SIZES } from "../../utils";
 

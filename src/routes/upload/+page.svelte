@@ -11,7 +11,7 @@
         X,
     } from "@lucide/svelte";
     import { upload } from "@vercel/blob/client";
-    import { createThumbnail } from "$lib/hooks/create-thumbnail";
+    import { createThumbnail } from "$lib/helpers/create-thumbnail";
 
     type Status = "pending" | "uploading" | "success" | "error";
     let fileInput: HTMLInputElement;
