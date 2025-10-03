@@ -12,6 +12,7 @@
     import type { CarouselAPI } from "$lib/components/ui/carousel/context";
     import { Dialog, DialogContent } from "$lib/components/ui/dialog";
     import { cn } from "$lib/utils";
+    import { writable } from "svelte/store";
     import type { PageData } from "./$types";
 
     let { data }: { data: PageData } = $props();
@@ -19,6 +20,7 @@
     let isOpen = $state(false);
     let currentIndex = $state(0);
     let carouselApi = $state<CarouselAPI>();
+    let activeSlide = $state<string | null>(null);
 
     const count = $derived(
         carouselApi ? carouselApi.scrollSnapList().length : 0,
@@ -28,12 +30,14 @@
     $effect(() => {
         if (isOpen && carouselApi) {
             carouselApi.scrollTo(currentIndex, true);
+            activeSlide = data.media[currentIndex].id;
         }
 
         if (carouselApi) {
             current = carouselApi.selectedScrollSnap() + 1;
             carouselApi.on("select", () => {
                 current = carouselApi!.selectedScrollSnap() + 1;
+                activeSlide = data.media[current - 1].id;
             });
         }
     });
@@ -103,7 +107,13 @@
                                 class="h-screen flex items-center justify-center"
                             >
                                 {#if media.type.startsWith("video/")}
-                                    <Video src={media} />
+                                    <Video
+                                        {activeSlide}
+                                        id={media.id}
+                                        src={media.mediaUrl}
+                                        type={media.type}
+                                        poster={media.thumbnailUrl}
+                                    />
                                 {:else}
                                     <Image
                                         src={media.mediaUrl ?? ""}
