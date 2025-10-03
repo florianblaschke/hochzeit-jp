@@ -31,9 +31,6 @@
 
     const form = superForm(formShape, {
         validators: zodClient(rsvpSchema),
-        onChange: () => {
-            console.log($formData);
-        },
         onUpdated: ({ form }) => {
             if (form.valid) {
                 queryClient.invalidateQueries({ queryKey: ["rsvp"] });

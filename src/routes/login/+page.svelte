@@ -23,8 +23,6 @@
         },
     });
 
-    console.log($loginMutation.error);
-
     async function handleSubmit(event: Event) {
         event.preventDefault();
         errorMessage = "";
