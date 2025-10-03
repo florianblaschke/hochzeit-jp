@@ -9,7 +9,7 @@ import type { Actions, PageServerLoad } from "./$types";
 import { guestSchema } from './schema';
 
 export const load: PageServerLoad = async ({ locals }) => {
-  if (!locals.session || locals.user?.email !== env.ADMIN_EMAIL) {
+  if (!locals.session || !locals.user?.host) {
     redirect(307, "/login")
   }
 

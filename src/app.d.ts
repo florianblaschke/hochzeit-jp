@@ -8,7 +8,7 @@ declare global {
     // interface Error {}
     interface Locals {
       session: Session | null;
-      user: User | null;
+      user: User & { host: boolean } | null;
     }
     // interface PageData {}
     // interface PageState {}

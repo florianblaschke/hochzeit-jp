@@ -11,24 +11,32 @@ import { db } from "./server/db";
 import { user } from "./server/db/schema";
 const resend = new Resend(env.RESEND)
 
+
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
   emailAndPassword: { enabled: false },
+  user: {
+    additionalFields: {
+      host: {
+        fieldName: "host",
+        type: "boolean",
+        defaultValue: false,
+      }
+    }
+  },
   plugins: [
     magicLink({
       sendMagicLink: async ({ email, token, url }) => {
-        if (email !== env.ADMIN_EMAIL) {
-          const result = await db.selectDistinct().from(user).where(eq(user.email, email))
-          if (!result.length) {
-            throw new APIError("UNAUTHORIZED", {
-              message: "We could not find you on the guest list."
-            })
-          }
+        const result = await db.selectDistinct().from(user).where(eq(user.email, email))
+        if (!result.length) {
+          throw new APIError("UNAUTHORIZED", {
+            message: "We could not find you on the guest list."
+          })
         }
 
-        const { data, error } = await resend.emails.send({
+        const { error } = await resend.emails.send({
           from: 'Jana & Philipp <onboarding@resend.dev>',
           to: [email],
           subject: 'Login',
@@ -45,3 +53,5 @@ export const auth = betterAuth({
     sveltekitCookies(getRequestEvent)
   ]
 });
+
+export const Session = auth.$Infer.Session

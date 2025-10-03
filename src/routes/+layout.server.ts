@@ -1,4 +1,3 @@
-import { env } from "$env/dynamic/private"
 import { db } from "$lib/server/db/index.js"
 import { rsvp } from "$lib/server/db/schema.js"
 import { eq } from "drizzle-orm"
@@ -11,8 +10,10 @@ export const load = async ({ locals }) => {
     attending = hasRSVP?.attending
   }
 
+  console.log(locals.user)
+
   return {
     attending,
-    isAdmin: locals.user?.email === env.ADMIN_EMAIL
+    isAdmin: locals.user?.host
   }
 }
