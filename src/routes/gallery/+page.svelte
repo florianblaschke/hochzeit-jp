@@ -118,7 +118,9 @@
                     <CarouselPrevious class="left-4 top-1/2 -translate-y-1/2" />
                     <CarouselNext class="right-4 top-1/2 -translate-y-1/2" />
                 </Carousel>
-                <p class="absolute top-2 right-50 text-white text-sm">
+                <p
+                    class="absolute bottom-0 right-0 left-0 w-full bg-black opacity-60 py-2 flex items-center justify-center text-white text-sm"
+                >
                     Bild {current} / {count}
                 </p>
             </DialogContent>
