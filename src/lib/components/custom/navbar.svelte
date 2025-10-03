@@ -3,7 +3,7 @@
     import { authClient } from "$lib/client";
     import { cn } from "$lib/utils";
     import { Badge } from "../ui/badge";
-    import { Button } from "../ui/button";
+    import { Button, buttonVariants } from "../ui/button";
     import NavbarMobile from "./navbar-mobile.svelte";
     import ThemeSwitcher from "./theme-switcher.svelte";
 
@@ -19,13 +19,31 @@
     <div class="container mx-auto">
         <NavbarMobile {attending} {isAdmin} />
         <div class="hidden md:flex items-center justify-between px-4 py-4">
-            <div class="flex justify-center gap-8 items-center">
-                <a href="/" class="font-bold text-lg"> JP Wedding </a>
+            <div class="flex justify-center gap-2 items-center">
+                <a
+                    href="/"
+                    class={cn(
+                        buttonVariants({
+                            variant: "link",
+                            class: "font-bold text-lg pl-0",
+                        }),
+                    )}
+                >
+                    JP Wedding
+                </a>
                 {#if $session.data}
-                    <a href="/gallery">Gallerie</a>
+                    <a
+                        href="/gallery"
+                        class={cn(buttonVariants({ variant: "link" }))}
+                        >Gallerie</a
+                    >
                 {/if}
                 {#if isAdmin}
-                    <a href="/list">Guest List</a>
+                    <a
+                        href="/list"
+                        class={cn(buttonVariants({ variant: "link" }))}
+                        >Guest List</a
+                    >
                 {/if}
             </div>
             <div class="flex-1 flex justify-end gap-4">

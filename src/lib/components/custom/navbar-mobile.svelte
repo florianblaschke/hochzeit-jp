@@ -42,10 +42,18 @@
             </Sheet.Header>
             <div class="grid flex-1 auto-rows-min gap-6 px-4">
                 {#if $session.data}
-                    <a href="/gallery">Gallerie</a>
+                    <a
+                        href="/gallery"
+                        class={cn(buttonVariants({ variant: "link" }))}
+                        >Gallerie</a
+                    >
                 {/if}
                 {#if isAdmin}
-                    <a href="/list">Guest List</a>
+                    <a
+                        href="/list"
+                        class={cn(buttonVariants({ variant: "link" }))}
+                        >Guest List</a
+                    >
                 {/if}
             </div>
 
