@@ -1,5 +1,5 @@
 import { env } from '$env/dynamic/private';
-import { getAllUsers } from '$lib/queries/user';
+import { getAllUsersWithRsvp } from '$lib/queries/user';
 import { db } from '$lib/server/db';
 import { user } from '$lib/server/db/schema';
 import { fail, redirect } from '@sveltejs/kit';
@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ locals }) => {
     redirect(307, "/login")
   }
 
-  const guests = await getAllUsers()
+  const guests = await getAllUsersWithRsvp()
 
   return {
     guests,

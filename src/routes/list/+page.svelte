@@ -62,7 +62,7 @@
 
     {#if $guestsQuery.isLoading}
         <div class="flex justify-center items-center py-12">
-            <div class="text-gray-500">Loading guests...</div>
+            <div class="text-muted-foreground">Loading guests...</div>
         </div>
     {:else if $guestsQuery.error}
         <div class="bg-red-50 border border-red-200 rounded-md p-4">

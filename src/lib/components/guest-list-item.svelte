@@ -1,4 +1,5 @@
 <script lang="ts">
+    import type { AllUsersWithRsvp } from "$lib/queries/user";
     import { cn } from "$lib/utils";
     import { createMutation, useQueryClient } from "@tanstack/svelte-query";
     import {
@@ -13,9 +14,17 @@
         AlertDialogTrigger,
     } from "./ui/alert-dialog/index";
     import { buttonVariants } from "./ui/button";
-    import type { User } from "better-auth";
+    import Card from "./ui/card/card.svelte";
+    import {
+        CardContent,
+        CardDescription,
+        CardFooter,
+        CardHeader,
+        CardTitle,
+    } from "./ui/card";
+    import Badge from "./ui/badge/badge.svelte";
 
-    let { guest }: { guest: User } = $props();
+    let { guest }: { guest: AllUsersWithRsvp[number] } = $props();
 
     const queryClient = useQueryClient();
 
@@ -37,46 +46,64 @@
     });
 
     const handleDelete = () => {
-        $deleteMutation.mutate(guest.id);
+        $deleteMutation.mutate(guest.user.id);
     };
 </script>
 
-<li
-    class="flex items-center justify-between p-4 rounded-lg shadow-sm border transition-opacity"
-    class:opacity-50={$deleteMutation.isPending}
->
-    <div class="flex-1">
-        <p class="text-sm font-medium">{guest.email}</p>
-        <p class="text-xs text-muted-foreground">
-            Added: {new Date(guest.createdAt).toLocaleDateString()}
-        </p>
-        {#if $deleteMutation.error}
-            <p class="text-xs text-destructive mt-1">
-                Failed to delete: {$deleteMutation.error.message}
-            </p>
-        {/if}
-    </div>
-    <AlertDialog>
-        <AlertDialogTrigger
-            class={cn(buttonVariants({ variant: "destructive" }))}
-        >
-            {$deleteMutation.isPending ? "Deleting..." : "Delete"}
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-            <AlertDialogHeader>
-                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                <AlertDialogDescription>
-                    Are you sure you want to delete guest with email: {guest.email}?
-                    This action cannot be undone.
-                </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                <AlertDialogAction
-                    class={cn(buttonVariants({ variant: "destructive" }))}
-                    onclick={handleDelete}>Delete</AlertDialogAction
-                >
-            </AlertDialogFooter>
-        </AlertDialogContent>
-    </AlertDialog>
+<li class:opacity-50={$deleteMutation.isPending}>
+    <Card>
+        <CardHeader>
+            <CardTitle class="flex items-center justify-between">
+                {guest.user.name}
+                <AlertDialog>
+                    <AlertDialogTrigger
+                        class={cn(buttonVariants({ variant: "destructive" }))}
+                    >
+                        {$deleteMutation.isPending ? "Deleting..." : "Delete"}
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Are you sure you want to delete guest with
+                                email: {guest.user.email}? This action cannot be
+                                undone.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                                class={cn(
+                                    buttonVariants({ variant: "destructive" }),
+                                )}
+                                onclick={handleDelete}>Delete</AlertDialogAction
+                            >
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </CardTitle>
+            <CardDescription>
+                Added: {new Date(guest.user.createdAt).toLocaleDateString()}
+            </CardDescription>
+        </CardHeader>
+        <CardContent class="space-y-4">
+            {#if typeof guest.rsvp?.attending === "undefined"}
+                <div class="flex items-center gap-2">
+                    <p class="text-sm font-semibold">Antwort:</p>
+                    <Badge>Ausstehend</Badge>
+                </div>
+            {/if}
+            <div class="flex items-center gap-2">
+                <p class="text-sm font-semibold">Nachricht:</p>
+                <p class="text-sm">{guest.rsvp?.message || "keine"}</p>
+            </div>
+        </CardContent>
+        <CardFooter class="justify-end">
+            {#if $deleteMutation.error}
+                <p class="text-xs text-destructive mt-1">
+                    Failed to delete: {$deleteMutation.error.message}
+                </p>
+            {/if}
+        </CardFooter>
+    </Card>
 </li>

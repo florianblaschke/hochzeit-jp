@@ -1,4 +1,4 @@
-import { getAllUsers } from '$lib/queries/user';
+import { getAllUsersWithRsvp } from '$lib/queries/user';
 import { db } from '$lib/server/db';
 import { user } from '$lib/server/db/schema';
 import { json } from '@sveltejs/kit';
@@ -6,7 +6,7 @@ import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async () => {
   try {
-    const guests = await getAllUsers()
+    const guests = await getAllUsersWithRsvp()
     return json(guests);
   } catch (error) {
     return json({ error: 'Failed to fetch guests' }, { status: 500 });
