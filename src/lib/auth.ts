@@ -37,7 +37,7 @@ export const auth = betterAuth({
         }
 
         const { error } = await resend.emails.send({
-          from: 'Jana & Philipp <onboarding@resend.dev>',
+          from: 'Jana & Philipp <einladung@klinikseelsorge-mannheim.de>',
           to: [email],
           subject: 'Login',
           html: loginEmail({ email, token, url }),
