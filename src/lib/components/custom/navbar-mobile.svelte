@@ -9,6 +9,7 @@
     import ThemeSwitcher from "./theme-switcher.svelte";
 
     let session = authClient.useSession();
+    let isSheetOpen = $state(false);
 
     let {
         isAdmin,
@@ -19,7 +20,7 @@
 <div class="flex items-center justify-between md:hidden px-4 py-4">
     <a href="/" class="font-bold text-lg"> JP Wedding </a>
     {#if $session.data}
-        <Sheet.Root>
+        <Sheet.Root bind:open={isSheetOpen}>
             <Sheet.Trigger
                 class={cn(
                     buttonVariants({
@@ -44,6 +45,7 @@
                 <div class="grid flex-1 auto-rows-min gap-6 px-4">
                     {#if $session.data}
                         <a
+                            onclick={() => (isSheetOpen = false)}
                             href="/gallery"
                             class={cn(buttonVariants({ variant: "link" }))}
                             >Gallerie</a
@@ -51,6 +53,7 @@
                     {/if}
                     {#if isAdmin}
                         <a
+                            onclick={() => (isSheetOpen = false)}
                             href="/list"
                             class={cn(buttonVariants({ variant: "link" }))}
                             >Guest List</a
