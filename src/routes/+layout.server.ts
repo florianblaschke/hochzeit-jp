@@ -10,8 +10,6 @@ export const load = async ({ locals }) => {
     attending = hasRSVP?.attending
   }
 
-  console.log(locals.user)
-
   return {
     attending,
     isAdmin: locals.user?.host
