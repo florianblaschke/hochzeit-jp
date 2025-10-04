@@ -255,11 +255,12 @@
                 <h2 class="text-xl font-semibold">
                     Selected Files ({files.size})
                 </h2>
-                <div class="space-x-2">
+                <div class="space-x-2 flex items-center">
                     <Button variant="outline" size="sm" onclick={clearAll}>
                         Clear All
                     </Button>
                     <Button
+                        size="sm"
                         onclick={uploadFiles}
                         disabled={Object.values(
                             Object.fromEntries(files),
