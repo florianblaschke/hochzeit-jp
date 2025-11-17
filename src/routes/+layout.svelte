@@ -24,6 +24,6 @@
 
 <QueryClientProvider client={queryClient}>
     <ModeWatcher />
-    <Navbar isAdmin={data.isAdmin} attending={data.attending} />
+    <Navbar isAdmin={data.isAdmin ?? false} attending={data.attending} />
     {@render children?.()}
 </QueryClientProvider>

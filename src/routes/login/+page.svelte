@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { authClient } from "$lib/client";
     import { Button } from "$lib/components/ui/button";
     import { Input } from "$lib/components/ui/input";
     import { Label } from "$lib/components/ui/label";
@@ -7,24 +6,39 @@
     import { createMutation } from "@tanstack/svelte-query";
 
     let email = $state("");
+    let password = $state("");
     let errorMessage = $state("");
+    let passwordRequired = $state(false);
+    let passwordMessage = $state("");
 
     let loginMutation = createMutation({
         mutationKey: ["login"],
         mutationFn: async () => {
-            const { error } = await authClient.signIn.magicLink({
-                email: email.trim(),
+            const res = await fetch(`/api/verify`, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify({ email, password }),
             });
 
-            if (error) {
-                errorMessage = error.message ?? "Something went wrong…";
-                throw new Error("unauthorized");
+            if (res.status === 401) {
+                passwordRequired = true;
+                passwordMessage =
+                    "Bitte gib das Passwort auf der Einladung ein";
+                throw new Error("missing_password");
+            }
+
+            if (res.status === 500) {
+                errorMessage =
+                    "Das Senden des Anmeldelinks ist fehlgeschlagen. Bitte versuche es erneut.";
             }
         },
     });
 
     async function handleSubmit(event: Event) {
         event.preventDefault();
+        passwordMessage = "";
         errorMessage = "";
 
         if (!email.trim()) {
@@ -65,6 +79,23 @@
                         </p>
                     {/if}
                 </div>
+
+                {#if passwordRequired}
+                    <div class="space-y-2">
+                        <Label for="email">Passwort</Label>
+                        <Input
+                            id="password"
+                            type="password"
+                            placeholder="Passwort"
+                            bind:value={password}
+                        />
+                        {#if passwordMessage}
+                            <p class="text-sm">
+                                {passwordMessage}
+                            </p>
+                        {/if}
+                    </div>
+                {/if}
 
                 <Button
                     type="submit"

@@ -58,7 +58,7 @@
                     <Button
                         onclick={() => {
                             authClient.signOut();
-                            goto("/login");
+                            goto("/login", { invalidateAll: true });
                         }}>Sign Out</Button
                     >
                 {/if}

@@ -29,13 +29,6 @@ export const auth = betterAuth({
   plugins: [
     magicLink({
       sendMagicLink: async ({ email, token, url }) => {
-        const result = await db.selectDistinct().from(user).where(eq(user.email, email))
-        if (!result.length) {
-          throw new APIError("UNAUTHORIZED", {
-            message: "We could not find you on the guest list."
-          })
-        }
-
         const { error } = await resend.emails.send({
           from: 'Jana & Philipp <einladung@klinikseelsorge-mannheim.de>',
           to: [email],
