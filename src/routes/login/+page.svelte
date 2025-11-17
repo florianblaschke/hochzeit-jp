@@ -5,19 +5,28 @@
     let { data }: { data: PageData } = $props();
 </script>
 
-<div class="min-h-screen bg-background">
-    <main class="container mx-auto px-4 py-16">
-        <div class="max-w-md mx-auto">
-            <div class="text-center mb-8">
-                <h2 class="text-3xl font-bold text-foreground mb-4">
-                    Join Our Celebration
-                </h2>
-                <p class="text-muted-foreground">
-                    Enter your email to access our wedding website
-                </p>
-            </div>
-
-            <LoginForm form={data.form} />
+<div class="grid min-h-svh lg:grid-cols-2">
+    <div
+        class="flex flex-col items-center justify-center w-full gap-4 p-6 md:p-10"
+    >
+        <div class="flex flex-col items-center justify-center gap-2 w-full">
+            <p>Hochzeit von</p>
+            <h1 class="text-xl sm:text-2xl md:text-4xl text-center">
+                Jana & Philipp
+            </h1>
+            <p>18 | 04 | 2026</p>
         </div>
-    </main>
+        <div class="flex items-center justify-center w-full">
+            <div class="w-full max-w-xs">
+                <LoginForm form={data.form} />
+            </div>
+        </div>
+    </div>
+    <div class="bg-muted relative hidden lg:block">
+        <img
+            src="https://utfs.io/f/KCC3bUkGRI6acaAoa80Y6yOhNc8LqRWudanU4SxCVQswgAHv"
+            alt="Jana & Philipp"
+            class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
+    </div>
 </div>

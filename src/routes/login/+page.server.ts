@@ -31,8 +31,6 @@ export const actions: Actions = {
 
     const { email, name, password } = form.data
 
-    console.log(form)
-
     if (!email) {
       return message(form, { error: "email", message: "Bitte gib eine Email Adresse ein" }, { status: 500 });
     }

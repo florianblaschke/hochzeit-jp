@@ -6,6 +6,7 @@
     import { ModeWatcher } from "mode-watcher";
     import "../app.css";
     import type { LayoutProps } from "./$types";
+    import { page } from "$app/state";
 
     let { children, data }: LayoutProps = $props();
 
@@ -24,10 +25,12 @@
 
 <QueryClientProvider client={queryClient}>
     <ModeWatcher />
-    <Navbar
-        isAdmin={data.isAdmin ?? false}
-        attending={data.attending}
-        isLoggedIn={data.isLoggedIn ?? false}
-    />
+    {#if page.route.id !== "/login"}
+        <Navbar
+            isAdmin={data.isAdmin ?? false}
+            attending={data.attending}
+            isLoggedIn={data.isLoggedIn ?? false}
+        />
+    {/if}
     {@render children?.()}
 </QueryClientProvider>
