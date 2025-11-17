@@ -4,7 +4,7 @@
     import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
     import * as Sheet from "$lib/components/ui/sheet/index.js";
     import { Menu } from "@lucide/svelte";
-    import { cn } from "tailwind-variants";
+    import { cn } from "$lib/utils";
     import { Badge } from "../ui/badge";
     import ThemeSwitcher from "./theme-switcher.svelte";
 
@@ -14,12 +14,17 @@
     let {
         isAdmin,
         attending,
-    }: { isAdmin: boolean; attending: boolean | undefined } = $props();
+        isLoggedIn = false,
+    }: {
+        isAdmin: boolean;
+        attending: boolean | undefined;
+        isLoggedIn?: boolean;
+    } = $props();
 </script>
 
 <div class="flex items-center justify-between md:hidden px-4 py-4">
     <a href="/" class="font-bold text-lg"> JP Wedding </a>
-    {#if $session.data}
+    {#if isLoggedIn || $session.data}
         <Sheet.Root bind:open={isSheetOpen}>
             <Sheet.Trigger
                 class={cn(
@@ -43,7 +48,7 @@
                     </Sheet.Description>
                 </Sheet.Header>
                 <div class="grid flex-1 auto-rows-min gap-6 px-4">
-                    {#if $session.data}
+                    {#if isLoggedIn || $session.data}
                         <a
                             onclick={() => (isSheetOpen = false)}
                             href="/gallery"
@@ -64,7 +69,7 @@
                 <Sheet.Footer
                     class="flex flex-row items-center justify-between"
                 >
-                    {#if $session.data}
+                    {#if isLoggedIn || $session.data}
                         <Button
                             onclick={() => {
                                 authClient.signOut();

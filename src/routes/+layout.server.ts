@@ -12,6 +12,7 @@ export const load = async ({ locals }) => {
 
   return {
     attending,
-    isAdmin: locals.user?.host
+    isAdmin: locals.user?.host,
+    isLoggedIn: !!locals.user
   }
 }

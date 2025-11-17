@@ -12,12 +12,17 @@
     let {
         isAdmin,
         attending,
-    }: { isAdmin: boolean; attending: boolean | undefined } = $props();
+        isLoggedIn = false,
+    }: {
+        isAdmin: boolean;
+        attending: boolean | undefined;
+        isLoggedIn?: boolean;
+    } = $props();
 </script>
 
 <header class="border-b border-border w-full">
     <div class="container mx-auto">
-        <NavbarMobile {attending} {isAdmin} />
+        <NavbarMobile {attending} {isAdmin} {isLoggedIn} />
         <div class="hidden md:flex items-center justify-between px-4 py-4">
             <div class="flex justify-center gap-2 items-center">
                 <a
@@ -31,7 +36,7 @@
                 >
                     JP Wedding
                 </a>
-                {#if $session.data}
+                {#if isLoggedIn || $session.data}
                     <a
                         href="/gallery"
                         class={cn(buttonVariants({ variant: "link" }))}
@@ -42,7 +47,7 @@
                     <a
                         href="/list"
                         class={cn(buttonVariants({ variant: "link" }))}
-                        >Guest List</a
+                        >Gästeliste</a
                     >
                 {/if}
             </div>
@@ -54,12 +59,12 @@
                         >{attending ? "Zugesagt" : "Abgesagt"}</Badge
                     >
                 {/if}
-                {#if $session.data}
+                {#if isLoggedIn || $session.data}
                     <Button
                         onclick={() => {
                             authClient.signOut();
                             goto("/login", { invalidateAll: true });
-                        }}>Sign Out</Button
+                        }}>Abmelden</Button
                     >
                 {/if}
                 <ThemeSwitcher />

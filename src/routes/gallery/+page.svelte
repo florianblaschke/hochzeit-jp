@@ -49,15 +49,15 @@
 
 <div class="container mx-auto px-4 py-8">
     <div class="mb-8 flex items-center justify-between">
-        <h1 class="text-3xl font-bold mb-2">Gallery</h1>
+        <h1 class="text-3xl font-bold mb-2">Gallerie</h1>
         <a href="/upload" class={cn(buttonVariants({ variant: "link" }))}>
-            Upload images
+            Bilder hochladen
         </a>
     </div>
 
     {#if data.media.length === 0}
         <div class="text-center py-16">
-            <p class="text-muted-foreground text-lg">No images found</p>
+            <p class="text-muted-foreground text-lg">Keine Bilder gefunden</p>
         </div>
     {:else}
         <div class="flex gap-px md:gap-1" style="flex-wrap: wrap;">

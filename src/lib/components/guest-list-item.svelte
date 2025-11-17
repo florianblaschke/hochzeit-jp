@@ -55,7 +55,7 @@
         <CardHeader>
             <CardTitle class="flex items-center justify-between">
                 {guest.user.name}
-                <AlertDialog>
+                <!-- <AlertDialog>
                     <AlertDialogTrigger
                         class={cn(buttonVariants({ variant: "destructive" }))}
                     >
@@ -80,11 +80,15 @@
                             >
                         </AlertDialogFooter>
                     </AlertDialogContent>
-                </AlertDialog>
+                </AlertDialog> -->
             </CardTitle>
-            <CardDescription>
-                Added: {new Date(guest.user.createdAt).toLocaleDateString()}
-            </CardDescription>
+            {#if guest.rsvp?.createdAt}
+                <CardDescription>
+                    Zugesagt: {new Date(
+                        guest.rsvp.createdAt,
+                    ).toLocaleDateString()}
+                </CardDescription>
+            {/if}
         </CardHeader>
         <CardContent class="space-y-4">
             {#if typeof guest.rsvp?.attending === "undefined"}

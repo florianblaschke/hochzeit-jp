@@ -16,7 +16,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 
   return {
     guests,
-    // form: await superValidate(zod(guestSchema)),
+    form: await superValidate(zod(guestSchema)),
   };
 };
 

@@ -39,7 +39,7 @@
     <div class="flex justify-between items-center mb-6">
         <h1 class="text-3xl font-bold">Guest List</h1>
 
-        <Sheet bind:open={isSheetOpen}>
+        <!-- <Sheet bind:open={isSheetOpen}>
             <SheetTrigger class={cn(buttonVariants({ variant: "default" }))}
                 >Add Guest</SheetTrigger
             >
@@ -57,7 +57,7 @@
                     <GuestForm onSuccess={closeSheet} form={data.form} />
                 </div>
             </SheetContent>
-        </Sheet>
+        </Sheet> -->
     </div>
 
     {#if $guestsQuery.isLoading}
@@ -72,15 +72,15 @@
         </div>
     {:else if $guestsQuery.data && $guestsQuery.data.length === 0}
         <div class="text-center py-12">
-            <div class="text-muted-foreground mb-4">No guests added yet</div>
-            <p class="text-sm text-muted-foreground">
+            <div class="text-muted-foreground mb-4">No guests yet</div>
+            <!-- <p class="text-sm text-muted-foreground">
                 Click "Add Guest" to get started
-            </p>
+            </p> -->
         </div>
     {:else if $guestsQuery.data}
         <ul class="space-y-3">
-            {#each $guestsQuery.data as guestItem (guestItem.id)}
-                <GuestListItem guest={guestItem} />
+            {#each $guestsQuery.data as guest (guest.id)}
+                <GuestListItem {guest} />
             {/each}
         </ul>
 

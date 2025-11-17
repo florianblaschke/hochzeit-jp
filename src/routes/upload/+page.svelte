@@ -81,11 +81,11 @@
     async function addFiles(newFiles: File[]) {
         const validFiles = newFiles.filter((file) => {
             if (!ACCEPTED_TYPES.includes(file.type)) {
-                alert(`File ${file.name} is not a supported format`);
+                alert(`Datei ${file.name} hat ein nicht unterstütztes Format`);
                 return false;
             }
             if (file.size > MAX_FILE_SIZE) {
-                alert(`File ${file.name} is too large (max 250MB)`);
+                alert(`Datei ${file.name} ist zu groß (max. 250MB)`);
                 return false;
             }
             return true;
@@ -197,15 +197,15 @@
 </script>
 
 <svelte:head>
-    <title>Upload Media</title>
+    <title>Bilder hochladen</title>
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8 max-w-4xl">
     <div class="mb-8">
-        <h1 class="text-3xl font-bold mb-2">Upload Media</h1>
+        <h1 class="text-3xl font-bold mb-2">Bilder hochladen</h1>
         <p class="text-muted-foreground">
-            Upload your images and videos. Images and videos up to 250MB are
-            supported.
+            Laden Sie Ihre Bilder und Videos hoch. Bilder und Videos bis zu
+            250MB werden unterstützt.
         </p>
     </div>
 
@@ -236,14 +236,14 @@
         >
             <Upload class="mx-auto h-12 w-12 text-muted-foreground mb-4" />
             <h3 class="text-lg font-medium mb-2">
-                Drop files here or click to browse
+                Dateien hier ablegen oder klicken zum Durchsuchen
             </h3>
             <p class="text-muted-foreground mb-4">
-                Support for images (JPEG, PNG, GIF, WebP, HEIC) and videos (MP4,
-                MOV, WebM, AVI)
+                Unterstützung für Bilder (JPEG, PNG, GIF, WebP, HEIC) und Videos
+                (MP4, MOV, WebM, AVI)
             </p>
             <p class="text-sm text-muted-foreground">
-                Maximum file size: 250MB
+                Maximale Dateigröße: 250MB
             </p>
         </div>
     </div>
@@ -253,11 +253,11 @@
         <div class="mb-6">
             <div class="flex items-center justify-between mb-4">
                 <h2 class="text-xl font-semibold">
-                    Selected Files ({files.size})
+                    Ausgewählte Dateien ({files.size})
                 </h2>
                 <div class="space-x-2 flex items-center">
                     <Button variant="outline" size="sm" onclick={clearAll}>
-                        Clear All
+                        Alle löschen
                     </Button>
                     <Button
                         size="sm"
@@ -266,7 +266,7 @@
                             Object.fromEntries(files),
                         ).every((f) => f.status === "success")}
                     >
-                        Upload Files
+                        Dateien hochladen
                     </Button>
                 </div>
             </div>
@@ -308,7 +308,7 @@
                                         <p
                                             class="text-xs text-muted-foreground mt-1"
                                         >
-                                            Uploading... {progress || 0}%
+                                            Wird hochgeladen... {progress || 0}%
                                         </p>
                                     </div>
                                 {/if}
@@ -341,10 +341,10 @@
     <!-- Upload Statistics -->
     {#if files.size > 0}
         <div class="bg-muted/50 rounded-lg p-4">
-            <h3 class="font-medium mb-2">Upload Summary</h3>
+            <h3 class="font-medium mb-2">Zusammenfassung</h3>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div>
-                    <span class="text-muted-foreground">Total files:</span>
+                    <span class="text-muted-foreground">Dateien gesamt:</span>
                     <span class="font-medium ml-2"
                         >{files.size -
                             Object.values(Object.fromEntries(files)).filter(
@@ -353,7 +353,7 @@
                     >
                 </div>
                 <div>
-                    <span class="text-muted-foreground">Total size:</span>
+                    <span class="text-muted-foreground">Gesamtgröße:</span>
                     <span class="font-medium ml-2">
                         {formatFileSize(
                             Object.values(Object.fromEntries(files)).reduce(
@@ -364,7 +364,7 @@
                     </span>
                 </div>
                 <div>
-                    <span class="text-muted-foreground">Uploaded:</span>
+                    <span class="text-muted-foreground">Hochgeladen:</span>
                     <span class="font-medium ml-2 text-green-600">
                         {Object.values(Object.fromEntries(files)).filter(
                             (f) => f.status === "success",
@@ -374,7 +374,7 @@
                     <span class="font-medium text-red-600">
                         {Object.values(Object.fromEntries(files)).filter(
                             (f) => f.status === "error",
-                        ).length} failed
+                        ).length} fehlgeschlagen
                     </span>
                 </div>
             </div>
