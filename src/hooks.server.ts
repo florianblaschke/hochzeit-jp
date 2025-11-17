@@ -12,5 +12,10 @@ export async function handle({ event, resolve }) {
     event.locals.session = session.session;
     event.locals.user = session.user;
   }
+
+  if (event.url.pathname === '/login' && event.request.method === 'POST') {
+    return resolve(event);
+  }
+
   return svelteKitHandler({ event, resolve, auth, building });
 }
