@@ -49,21 +49,25 @@
     </FormField>
 
     {#if passwordRequired}
-        <FormField {form} name="name">
+        <FormField {form} name="password">
             <FormControl>
                 {#snippet children({ props })}
-                    <FormLabel>Name</FormLabel>
-                    <Input {...props} bind:value={$formData.name} />
+                    <FormLabel>Passwort</FormLabel>
+                    <Input
+                        {...props}
+                        type="password"
+                        bind:value={$formData.password}
+                    />
                 {/snippet}
             </FormControl>
             <FormFieldErrors />
         </FormField>
 
-        <FormField {form} name="password">
+        <FormField {form} name="name">
             <FormControl>
                 {#snippet children({ props })}
-                    <FormLabel>Passwort</FormLabel>
-                    <Input {...props} bind:value={$formData.password} />
+                    <FormLabel>Name</FormLabel>
+                    <Input {...props} bind:value={$formData.name} />
                 {/snippet}
             </FormControl>
             <FormFieldErrors />
