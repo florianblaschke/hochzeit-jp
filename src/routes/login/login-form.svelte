@@ -34,7 +34,7 @@
         },
     });
 
-    const { form: formData, enhance, submitting, message } = form;
+    const { form: formData, enhance, submitting, message, errors } = form;
 </script>
 
 <form method="POST" class="space-y-4 p-4" use:enhance>
@@ -75,11 +75,12 @@
     </Button>
 
     {#if $message}
-        <div
-            class:success={$message.status == "success"}
-            class:error={$message.status == "error"}
-        >
-            {$message.text}
+        <div class="text-green-500 text-sm leading-tight">{$message}</div>
+    {/if}
+
+    {#if $errors._errors}
+        <div class="text-destructive text-sm leading-tight">
+            {$errors._errors[0]}
         </div>
     {/if}
 </form>

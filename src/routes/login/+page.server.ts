@@ -55,6 +55,6 @@ export const actions: Actions = {
       return setError(form, "", "Der Anmeldelink konnte nicht gesendet werden. Versuch es später erneut.", { status: 500 });
     }
 
-    return message(form, { success: true, message: "Du erhältst in Kürze einen Anmeldelink. Bitte schau hierfür in dein Postfach." })
+    return message(form, "Du erhältst in Kürze einen Anmeldelink. Bitte schau hierfür in dein Postfach.")
   },
 };
