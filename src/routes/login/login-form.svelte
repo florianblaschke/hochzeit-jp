@@ -21,13 +21,13 @@
         form: SuperValidated<Infer<LoginSchema>>;
     } = $props();
 
-    let passwordRequired = $state(false);
+    let detailsRequired = $state(false);
 
     const form = superForm(formShape, {
         validators: zodClient(loginSchema),
         onUpdated: ({ form }) => {
-            if (form.errors.password) {
-                passwordRequired = true;
+            if (form.errors.password || form.errors.name) {
+                detailsRequired = true;
             }
             if (form.valid) {
             }
@@ -48,7 +48,7 @@
         <FormFieldErrors />
     </FormField>
 
-    {#if passwordRequired}
+    {#if detailsRequired}
         <FormField {form} name="password">
             <FormControl>
                 {#snippet children({ props })}
