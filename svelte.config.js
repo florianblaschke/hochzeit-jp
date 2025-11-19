@@ -8,15 +8,18 @@ const config = {
   preprocess: vitePreprocess(),
   kit: {
     adapter: adapter({
+      regions: ['fra1'],
       images: {
         remotePatterns: [{
           "protocol": "https",
           "hostname": "fg2wsnyw74j1a78y.public.blob.vercel-storage.com",
         }],
-        sizes: [640, 828, 1200, 1920, 3840],
+        sizes: [640, 960, 1280],
+        formats: ['image/webp'],
         minimumCacheTTL: 300,
-        domains: ["hochzeit-jp.vercel.app"],
-        formats: ["image/avif", "image/webp"]
+        domains: ["hochzeit-jp.vercel.app", "utfs.io"],
+        formats: ["image/webp"]
+
       }
     })
   }
