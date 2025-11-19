@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { buttonVariants } from "../ui/button";
     import CardContent from "../ui/card/card-content.svelte";
     import CardDescription from "../ui/card/card-description.svelte";
     import CardHeader from "../ui/card/card-header.svelte";
@@ -45,9 +46,15 @@
                             {address.title}
                         </h3>
                     </CardTitle>
-                    <CardDescription class="text-lg">
-                        <a target="_blank" rel="noopener" href={address.href}
-                            >{address.address}</a
+                    <CardDescription>
+                        <a
+                            target="_blank"
+                            rel="noopener"
+                            class={buttonVariants({
+                                variant: "link",
+                                class: "text-muted-foreground pl-0 text-lg whitespace-normal pb-8 md:pb-0",
+                            })}
+                            href={address.href}>{address.address}</a
                         >
                     </CardDescription>
                     <CardContent class="px-0">

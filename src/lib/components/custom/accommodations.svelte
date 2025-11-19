@@ -1,4 +1,11 @@
 <script lang="ts">
+    import { ExternalLink } from "@lucide/svelte";
+    import { buttonVariants } from "../ui/button";
+    import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
+    import CardAction from "../ui/card/card-action.svelte";
+    import CardFooter from "../ui/card/card-footer.svelte";
+    import { cn } from "$lib/utils";
+
     interface Accommodation {
         name: string;
         url: string;
@@ -25,7 +32,7 @@
 
 <section>
     <div class="text-center mb-8">
-        <h2 class="text-3xl font-bold mb-4">Übernachtungsmöglichkeiten</h2>
+        <h2 class="text-3xl font-bold mb-4">Unterkünfte</h2>
         <p class="text-muted-foreground max-w-2xl mx-auto">
             In der Location selbst gibt es leider keine
             Übernachtungsmöglichkeiten. Im Folgenden haben wir euch aber ein
@@ -33,25 +40,38 @@
         </p>
     </div>
 
-    <div class="max-w-4xl mx-auto space-y-6">
-        {#each accommodations as accommodation}
-            <div class="bg-card rounded-lg border p-6">
-                <h3 class="text-xl font-semibold mb-3">
-                    <a
-                        href={accommodation.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-primary hover:underline"
-                    >
-                        {accommodation.name}
-                    </a>
-                </h3>
-                {#if accommodation.description}
-                    <p class="text-muted-foreground text-sm leading-relaxed">
-                        {accommodation.description}
-                    </p>
-                {/if}
-            </div>
+    <div class="grid md:grid-cols-2 gap-12">
+        {#each accommodations as accommodation, index}
+            <Card class={cn("w-full", index === 0 && "col-span-full")}>
+                <CardHeader>
+                    <CardTitle>
+                        <h3 class="text-2xl">
+                            {accommodation.name}
+                        </h3>
+                    </CardTitle>
+                    {#if accommodation.description}
+                        <CardDescription class="text-lg">
+                            {accommodation.description}
+                        </CardDescription>
+                    {/if}
+                </CardHeader>
+                <CardFooter>
+                    <CardAction>
+                        <a
+                            target="_blank"
+                            rel="noopener"
+                            class={buttonVariants({
+                                variant: "link",
+                                class: "pl-0!",
+                            })}
+                            href={accommodation.url}
+                        >
+                            Zur Homepage
+                            <ExternalLink />
+                        </a>
+                    </CardAction>
+                </CardFooter>
+            </Card>
         {/each}
     </div>
 </section>
