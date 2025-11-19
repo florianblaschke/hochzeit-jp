@@ -1,4 +1,6 @@
 <script lang="ts">
+    import Separator from "../ui/separator/separator.svelte";
+
     interface TimelineItem {
         time: string;
         event: string;
@@ -12,29 +14,25 @@
     ];
 </script>
 
-<section class="py-12">
+<section>
     <div class="text-center mb-8">
         <h2 class="text-3xl font-bold mb-4">Ablauf</h2>
     </div>
 
     <div class="max-w-2xl mx-auto">
-        <div class="ml-32 space-y-6 grid items-center justify-center">
+        <div class="space-y-6 grid items-center justify-center">
             {#each timelineItems as item, index}
-                <div class="flex items-center gap-6">
+                <div class="flex flex-col items-center gap-6">
                     <div class="flex-shrink-0 w-20 text-right">
                         <span class="text-lg font-semibold text-primary"
                             >{item.time}</span
                         >
                     </div>
-                    <div class="flex-shrink-0 w-px h-12 bg-border relative">
-                        <div
-                            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-primary rounded-full border-2 border-background"
-                        ></div>
-                    </div>
                     <div class="flex-1">
                         <h3 class="text-xl font-medium">{item.event}</h3>
                     </div>
                 </div>
+                <Separator />
             {/each}
         </div>
     </div>

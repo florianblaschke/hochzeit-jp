@@ -3,7 +3,7 @@
         "https://docs.google.com/spreadsheets/d/1-hinreJ_Jj1Mt5LhDKXjKGYFMgmXBhOlPlrCFTEzpIo/edit?usp=sharing";
 </script>
 
-<section class="py-12">
+<section>
     <div class="text-center mb-8">
         <h2 class="text-3xl font-bold mb-4">Beiträge zum Sektempfang</h2>
         <p class="text-muted-foreground max-w-2xl mx-auto mb-6">

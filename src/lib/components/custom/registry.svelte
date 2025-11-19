@@ -2,7 +2,7 @@
     const registryUrl = "https://www.wishbob.com/iywxdctrzg";
 </script>
 
-<section class="py-12">
+<section>
     <div class="text-center mb-8">
         <h2 class="text-3xl font-bold mb-4">Wunschliste</h2>
         <p class="text-muted-foreground max-w-2xl mx-auto mb-6">

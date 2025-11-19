@@ -5,7 +5,7 @@
     };
 </script>
 
-<section class="py-12">
+<section>
     <div class="text-center">
         <h2 class="text-3xl font-bold mb-8">Trauvers</h2>
 

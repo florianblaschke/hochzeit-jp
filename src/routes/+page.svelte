@@ -2,7 +2,6 @@
     import RSVPForm from "./rsvp-form.svelte";
     import Timeline from "$lib/components/custom/timeline.svelte";
     import Addresses from "$lib/components/custom/addresses.svelte";
-    import Parking from "$lib/components/custom/parking.svelte";
     import Accommodations from "$lib/components/custom/accommodations.svelte";
     import Registry from "$lib/components/custom/registry.svelte";
     import ReceptionContributions from "$lib/components/custom/reception-contributions.svelte";
@@ -19,10 +18,9 @@
                 <RSVPForm form={data.form} />
             </div>
         {:else}
-            <div class="space-y-16">
+            <div class="space-y-16 pt-8">
                 <Timeline />
                 <Addresses />
-                <Parking />
                 <Accommodations />
                 <Registry />
                 <ReceptionContributions />
