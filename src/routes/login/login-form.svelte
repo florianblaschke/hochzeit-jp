@@ -37,7 +37,7 @@
     const { form: formData, enhance, submitting, message, errors } = form;
 </script>
 
-<form method="POST" class="space-y-4 p-4" use:enhance>
+<form method="POST" class="space-y-4 p-4 md:text-black text-white" use:enhance>
     <FormField {form} name="email">
         <FormControl>
             {#snippet children({ props })}
