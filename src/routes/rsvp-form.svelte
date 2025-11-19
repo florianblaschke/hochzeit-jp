@@ -23,6 +23,7 @@
     import CardDescription from "$lib/components/ui/card/card-description.svelte";
     import { Card } from "$lib/components/ui/card";
     import CardContent from "$lib/components/ui/card/card-content.svelte";
+    import Image from "$lib/components/custom/image.svelte";
 
     let {
         onSuccess,
@@ -49,7 +50,7 @@
 
 <div class="grid h-[calc(100vh-70px)] lg:grid-cols-2">
     <div class="bg-muted relative hidden lg:block">
-        <img
+        <Image
             src="https://utfs.io/f/KCC3bUkGRI6aFyCvgbwHjyJ3cMg4oerqVXQlb2YLUfCxNR19"
             alt="Jana & Philipp"
             class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"

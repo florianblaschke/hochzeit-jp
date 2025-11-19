@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Image from "$lib/components/custom/image.svelte";
     import type { PageData } from "./$types";
     import LoginForm from "./login-form.svelte";
 
@@ -23,8 +24,9 @@
         </div>
     </div>
     <div class="bg-muted relative hidden lg:block">
-        <img
+        <Image
             src="https://utfs.io/f/KCC3bUkGRI6acaAoa80Y6yOhNc8LqRWudanU4SxCVQswgAHv"
+            sizes="(max-width: 768px) 50vw"
             alt="Jana & Philipp"
             class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />

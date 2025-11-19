@@ -42,7 +42,11 @@
         <FormControl>
             {#snippet children({ props })}
                 <FormLabel>Email Adresse</FormLabel>
-                <Input {...props} bind:value={$formData.email} />
+                <Input
+                    {...props}
+                    bind:value={$formData.email}
+                    autocomplete="email"
+                />
             {/snippet}
         </FormControl>
         <FormFieldErrors />
@@ -67,7 +71,11 @@
             <FormControl>
                 {#snippet children({ props })}
                     <FormLabel>Name</FormLabel>
-                    <Input {...props} bind:value={$formData.name} />
+                    <Input
+                        {...props}
+                        bind:value={$formData.name}
+                        autocomplete="name"
+                    />
                 {/snippet}
             </FormControl>
             <FormFieldErrors />
