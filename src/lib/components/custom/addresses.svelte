@@ -30,7 +30,7 @@
     ];
 </script>
 
-<section>
+<section class="container mx-auto py-container">
     <div class="text-center mb-8">
         <h2 class="text-3xl font-bold mb-4">Adressen</h2>
     </div>
@@ -39,7 +39,7 @@
         class="w-full justify-between flex flex-col md:flex-row items-center gap-12"
     >
         {#each addresses as address}
-            <Card class="w-full">
+            <Card class="w-full text-center">
                 <CardHeader>
                     <CardTitle>
                         <h3>
