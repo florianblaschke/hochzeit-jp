@@ -1,7 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
-export const SIZES = [640, 828, 1200, 1920, 3840]
+export const SIZES = [640, 960, 1280]
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
