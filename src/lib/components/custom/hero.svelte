@@ -15,6 +15,6 @@
         <h1 class="text-white text-4xl md:text-6xl font-bold mb-2">
             Jana & Philipp
         </h1>
-        <p class="text-white text-xl">Wir heiraten</p>
+        <p class="text-white text-3xl md:text-4xl">Wir heiraten</p>
     </article>
 </div>

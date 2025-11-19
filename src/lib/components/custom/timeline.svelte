@@ -14,7 +14,7 @@
     ];
 </script>
 
-<section>
+<section class="bg-secondary py-container">
     <div class="text-center mb-8">
         <h2 class="text-3xl font-bold mb-4">Ablauf</h2>
     </div>

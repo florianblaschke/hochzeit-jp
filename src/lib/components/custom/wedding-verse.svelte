@@ -5,19 +5,15 @@
     };
 </script>
 
-<section>
-    <div class="text-center">
-        <h2 class="text-3xl font-bold mb-8">Trauvers</h2>
-
-        <div class="max-w-3xl mx-auto bg-card rounded-lg border p-8">
-            <blockquote
-                class="text-lg leading-relaxed text-foreground italic mb-6"
-            >
-                "{verse.text}"
-            </blockquote>
-            <cite class="text-muted-foreground font-medium text-sm">
-                {verse.reference}
-            </cite>
-        </div>
+<section class="text-center">
+    <div class="max-w-3xl mx-auto bg-card rounded-lg p-8">
+        <blockquote
+            class="text-lg md:text-2xl leading-relaxed text-foreground italic mb-6"
+        >
+            "{verse.text}"
+        </blockquote>
+        <cite class="text-muted-foreground font-medium text-sm">
+            {verse.reference}
+        </cite>
     </div>
 </section>

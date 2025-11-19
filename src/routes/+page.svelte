@@ -17,14 +17,14 @@
         <RSVPForm form={data.form} />
     {:else}
         <main>
-            <div class="space-y-16 pt-8">
+            <div class="space-y-16 md:space-y-32 pt-16 md:pt-8">
                 <Hero />
+                <WeddingVerse />
                 <Timeline />
                 <Addresses />
                 <Accommodations />
                 <Registry />
                 <ReceptionContributions />
-                <WeddingVerse />
             </div>
         </main>
     {/if}
