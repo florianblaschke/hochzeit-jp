@@ -48,7 +48,17 @@
     const { form: formData, enhance, submitting } = form;
 </script>
 
-<div class="grid h-[calc(100vh-70px)] lg:grid-cols-2">
+<div class="grid min-h-svh lg:grid-cols-2 relative">
+    <div class="absolute inset-0 lg:hidden">
+        <Image
+            src="https://utfs.io/f/KCC3bUkGRI6aFyCvgbwHjyJ3cMg4oerqVXQlb2YLUfCxNR19"
+            sizes="100vw"
+            alt="Jana & Philipp"
+            class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+        />
+        <div class="absolute inset-0 bg-black/40"></div>
+    </div>
+
     <div class="bg-muted relative hidden lg:block">
         <Image
             src="https://utfs.io/f/KCC3bUkGRI6aFyCvgbwHjyJ3cMg4oerqVXQlb2YLUfCxNR19"
@@ -56,11 +66,13 @@
             class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
         />
     </div>
-    <div>
-        <Card class="border-none py-40">
+    <div class="relative z-10">
+        <Card class="border-none py-40 bg-transparent lg:bg-card">
             <CardHeader class="text-center">
-                <CardTitle>RSVP – Répondez s'il vous plaît</CardTitle>
-                <CardDescription>
+                <CardTitle class="text-white lg:text-foreground"
+                    >RSVP – Répondez s'il vous plaît</CardTitle
+                >
+                <CardDescription class="text-white/90 lg:text-muted-foreground">
                     Lass uns wissen, ob du kommen kannst!
                 </CardDescription>
             </CardHeader>
@@ -68,12 +80,13 @@
                 <form
                     method="POST"
                     use:enhance
-                    class="flex w-full flex-col items-center"
+                    class="flex w-full flex-col items-center justify-end md:justify-normal"
                 >
                     <FormFieldset {form} name="attending">
                         <RadioGroup
                             bind:value={$formData.attending}
                             name="attending"
+                            class="flex items-center flex-row"
                         >
                             <div class="flex items-center space-x-3 space-y-0">
                                 <FormControl>
@@ -82,7 +95,8 @@
                                             value="true"
                                             {...props}
                                         />
-                                        <FormLabel class="font-normal"
+                                        <FormLabel
+                                            class="font-normal text-white lg:text-foreground"
                                             >Ja, ich komme!</FormLabel
                                         >
                                     {/snippet}
@@ -95,7 +109,8 @@
                                             value="false"
                                             {...props}
                                         />
-                                        <FormLabel class="font-normal"
+                                        <FormLabel
+                                            class="font-normal text-white lg:text-foreground"
                                             >Nein, ich komme nicht.</FormLabel
                                         >
                                     {/snippet}
@@ -107,11 +122,14 @@
                     <FormField {form} name="message" class="py-4 w-full">
                         <FormControl>
                             {#snippet children({ props })}
-                                <FormLabel>Nachricht (optional)</FormLabel>
+                                <FormLabel class="text-white lg:text-foreground"
+                                    >Nachricht (optional)</FormLabel
+                                >
                                 <Textarea
                                     {...props}
                                     bind:value={$formData.message}
                                     placeholder="Lass uns gerne eine Nachricht da..."
+                                    class="bg-background"
                                 />
                             {/snippet}
                         </FormControl>

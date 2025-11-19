@@ -20,55 +20,58 @@
     } = $props();
 </script>
 
-<header class="border-b border-border w-full">
-    <div class="container mx-auto">
-        <NavbarMobile {attending} {isAdmin} {isLoggedIn} />
-        <div class="hidden md:flex items-center justify-between px-4 py-4">
-            <div class="flex justify-center gap-2 items-center">
-                <a
-                    href="/"
-                    class={cn(
-                        buttonVariants({
-                            variant: "link",
-                            class: "font-bold text-lg pl-0",
-                        }),
-                    )}
-                >
-                    JP Wedding
-                </a>
-                {#if isLoggedIn || $session.data}
+{#if typeof attending === "boolean"}
+    <header class="border-b border-border w-full">
+        <div class="container mx-auto">
+            <NavbarMobile {attending} {isAdmin} {isLoggedIn} />
+            <div class="hidden md:flex items-center justify-between px-4 py-4">
+                <div class="flex justify-center gap-2 items-center">
                     <a
-                        href="/gallery"
-                        class={cn(buttonVariants({ variant: "link" }))}
-                        >Gallerie</a
+                        href="/"
+                        class={cn(
+                            buttonVariants({
+                                variant: "link",
+                                class: "font-bold text-lg pl-0",
+                            }),
+                        )}
                     >
-                {/if}
-                {#if isAdmin}
-                    <a
-                        href="/list"
-                        class={cn(buttonVariants({ variant: "link" }))}
-                        >Gästeliste</a
-                    >
-                {/if}
-            </div>
-            <div class="flex-1 flex justify-end gap-4">
-                {#if typeof attending !== "undefined"}
-                    <Badge
-                        variant="default"
-                        class={cn(attending ? "bg-green-500" : "bg-red-500")}
-                        >{attending ? "Zugesagt" : "Abgesagt"}</Badge
-                    >
-                {/if}
-                {#if isLoggedIn || $session.data}
-                    <Button
-                        onclick={() => {
-                            authClient.signOut();
-                            goto("/login", { invalidateAll: true });
-                        }}>Abmelden</Button
-                    >
-                {/if}
-                <ThemeSwitcher />
+                        JP Wedding
+                    </a>
+                    {#if isLoggedIn || $session.data}
+                        <a
+                            href="/gallery"
+                            class={cn(buttonVariants({ variant: "link" }))}
+                            >Gallerie</a
+                        >
+                    {/if}
+                    {#if isAdmin}
+                        <a
+                            href="/list"
+                            class={cn(buttonVariants({ variant: "link" }))}
+                            >Gästeliste</a
+                        >
+                    {/if}
+                </div>
+                <div class="flex-1 flex justify-end gap-4">
+                    {#if typeof attending !== "undefined"}
+                        <Badge
+                            variant="default"
+                            class={cn(
+                                attending ? "bg-green-500" : "bg-red-500",
+                            )}>{attending ? "Zugesagt" : "Abgesagt"}</Badge
+                        >
+                    {/if}
+                    {#if isLoggedIn || $session.data}
+                        <Button
+                            onclick={() => {
+                                authClient.signOut();
+                                goto("/login", { invalidateAll: true });
+                            }}>Abmelden</Button
+                        >
+                    {/if}
+                    <ThemeSwitcher />
+                </div>
             </div>
         </div>
-    </div>
-</header>
+    </header>
+{/if}
