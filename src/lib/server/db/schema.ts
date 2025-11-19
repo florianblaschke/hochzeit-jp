@@ -15,6 +15,9 @@ export const user = pgTable("user", {
   host: boolean("host").default(false),
 });
 
+export type Guest = typeof user.$inferSelect
+
+
 export const session = pgTable("session", {
   id: text("id").primaryKey(),
   expiresAt: timestamp("expires_at").notNull(),
@@ -90,6 +93,8 @@ export const rsvp = pgTable("rsvp", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
 })
+
+export type RSVP = typeof rsvp.$inferSelect
 
 
 export const userRelations = relations(user, ({ many, one }) => ({
