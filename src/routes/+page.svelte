@@ -7,6 +7,7 @@
     import ReceptionContributions from "$lib/components/custom/reception-contributions.svelte";
     import WeddingVerse from "$lib/components/custom/wedding-verse.svelte";
     import type { PageData } from "./$types";
+    import Hero from "$lib/components/custom/hero.svelte";
 
     let { data }: { data: PageData } = $props();
 </script>
@@ -15,8 +16,9 @@
     {#if !Boolean(data.rsvp)}
         <RSVPForm form={data.form} />
     {:else}
-        <main class="container mx-auto px-4 py-8">
+        <main>
             <div class="space-y-16 pt-8">
+                <Hero />
                 <Timeline />
                 <Addresses />
                 <Accommodations />

@@ -6,6 +6,7 @@
     import { Button, buttonVariants } from "../ui/button";
     import NavbarMobile from "./navbar-mobile.svelte";
     import ThemeSwitcher from "./theme-switcher.svelte";
+    import { onMount } from "svelte";
 
     let session = authClient.useSession();
 
@@ -18,10 +19,52 @@
         attending: boolean | undefined;
         isLoggedIn?: boolean;
     } = $props();
+
+    let isVisible = $state(true);
+    let lastScrollY = $state(0);
+    let ticking = $state(false);
+
+    function updateScrollDirection() {
+        const scrollY = window.scrollY;
+
+        if (Math.abs(scrollY - lastScrollY) < 10) {
+            ticking = false;
+            return;
+        }
+
+        if (scrollY < 10 || scrollY < lastScrollY) {
+            isVisible = true;
+        } else if (scrollY > lastScrollY && scrollY > 100) {
+            isVisible = false;
+        }
+
+        lastScrollY = scrollY;
+        ticking = false;
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(updateScrollDirection);
+        }
+    }
+
+    onMount(() => {
+        const handleScroll = () => requestTick();
+        window.addEventListener("scroll", handleScroll, { passive: true });
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    });
 </script>
 
 {#if typeof attending === "boolean"}
-    <header class="border-b border-border w-full">
+    <header
+        class="border-b border-border w-full fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm transition-transform duration-300 {isVisible
+            ? 'translate-y-0'
+            : '-translate-y-full'}"
+    >
         <div class="container mx-auto">
             <NavbarMobile {attending} {isAdmin} {isLoggedIn} />
             <div class="hidden md:flex items-center justify-between px-4 py-4">
