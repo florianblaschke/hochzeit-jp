@@ -1,10 +1,6 @@
 import { building, dev } from "$app/environment";
 
 export function optimize(src: string | null | undefined, widths = [640, 960, 1280], quality = 90) {
-  if (!src) {
-    return ""
-  }
-
   if (dev || building) { return src };
 
   return widths
