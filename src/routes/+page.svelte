@@ -12,12 +12,10 @@
 </script>
 
 <div class="bg-background">
-    <main class="container mx-auto px-4 py-8">
-        {#if !Boolean(data.rsvp)}
-            <div class="mt-8">
-                <RSVPForm form={data.form} />
-            </div>
-        {:else}
+    {#if !Boolean(data.rsvp)}
+        <RSVPForm form={data.form} />
+    {:else}
+        <main class="container mx-auto px-4 py-8">
             <div class="space-y-16 pt-8">
                 <Timeline />
                 <Addresses />
@@ -26,6 +24,6 @@
                 <ReceptionContributions />
                 <WeddingVerse />
             </div>
-        {/if}
-    </main>
+        </main>
+    {/if}
 </div>

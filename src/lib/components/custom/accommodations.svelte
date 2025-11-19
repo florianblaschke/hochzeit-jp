@@ -45,7 +45,7 @@
             <Card class={cn("w-full", index === 0 && "col-span-full")}>
                 <CardHeader>
                     <CardTitle>
-                        <h3 class="text-2xl">
+                        <h3>
                             {accommodation.name}
                         </h3>
                     </CardTitle>

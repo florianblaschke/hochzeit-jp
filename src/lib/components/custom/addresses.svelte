@@ -42,7 +42,7 @@
             <Card class="w-full">
                 <CardHeader>
                     <CardTitle>
-                        <h3 class="text-2xl">
+                        <h3>
                             {address.title}
                         </h3>
                     </CardTitle>
