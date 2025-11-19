@@ -8,4 +8,4 @@
     let { src, srcset, ...props }: ImageProps = $props();
 </script>
 
-<img src={optimize(src)} srcset={optimize(src, SIZES)} {...props} />
+<img srcset={optimize(src, SIZES)} {...props} />
