@@ -9,6 +9,8 @@ import { eq } from 'drizzle-orm';
 import { env } from '$env/dynamic/private';
 import { auth } from '$lib/auth.js';
 
+export const prerender = "auto"; 
+
 export const load = async ({ locals }) => {
   if (locals.user) {
     redirect(305, "/")
