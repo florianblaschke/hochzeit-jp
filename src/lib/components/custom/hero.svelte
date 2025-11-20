@@ -5,7 +5,7 @@
 <div class="relative">
     <Image
         src="https://utfs.io/f/KCC3bUkGRI6aDr9H2BAsFpoxCthcJX0EdVaBSA6eiNk1QUMY"
-        class="grayscale-100"
+        class="grayscale-100 w-full"
     />
 
     <article
