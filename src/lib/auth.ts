@@ -8,7 +8,6 @@ import { sveltekitCookies } from "better-auth/svelte-kit";
 import { eq } from "drizzle-orm";
 import { Resend } from "resend";
 import { db } from "./server/db";
-import { user } from "./server/db/schema";
 const resend = new Resend(env.RESEND)
 
 

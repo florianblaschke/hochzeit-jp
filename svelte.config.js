@@ -17,7 +17,7 @@ const config = {
         sizes: [640, 960, 1280],
         formats: ['image/webp'],
         minimumCacheTTL: 300,
-        domains: ["hochzeit-jp.vercel.app", "utfs.io"],
+        domains: ["hochzeit-jp.vercel.app", "utfs.io", "hochzeit-jp.de"],
         formats: ["image/webp"]
 
       }
