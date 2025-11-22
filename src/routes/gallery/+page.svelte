@@ -12,7 +12,6 @@
     import type { CarouselAPI } from "$lib/components/ui/carousel/context";
     import { Dialog, DialogContent } from "$lib/components/ui/dialog";
     import { cn } from "$lib/utils";
-    import { writable } from "svelte/store";
     import type { PageData } from "./$types";
 
     let { data }: { data: PageData } = $props();
@@ -21,6 +20,7 @@
     let currentIndex = $state(0);
     let carouselApi = $state<CarouselAPI>();
     let activeSlide = $state<string | null>(null);
+    let uploadDis;
 
     const count = $derived(
         carouselApi ? carouselApi.scrollSnapList().length : 0,
@@ -41,14 +41,16 @@
             });
         }
     });
+
+    let date = new Date();
 </script>
 
 <svelte:head>
-    <title>Gallery</title>
+    <title>Jana & Philipp – Gallerie</title>
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8">
-    <div class="mb-8 flex items-center justify-between">
+    <div class="mb-8 flex items-center justify-between pt-16">
         <h1 class="text-3xl font-bold mb-2">Gallerie</h1>
         <a href="/upload" class={cn(buttonVariants({ variant: "link" }))}>
             Bilder hochladen
@@ -57,7 +59,10 @@
 
     {#if data.media.length === 0}
         <div class="text-center py-16">
-            <p class="text-muted-foreground text-lg">Keine Bilder gefunden</p>
+            <p class="text-muted-foreground text-lg">
+                Zur Zeit gibt es noch keine Bilder. Ab dem 18.04.2026 kannst du
+                Bilder von der Hochzeit hier hochladen.
+            </p>
         </div>
     {:else}
         <div class="flex gap-px md:gap-1" style="flex-wrap: wrap;">

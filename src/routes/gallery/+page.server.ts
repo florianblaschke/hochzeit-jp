@@ -8,8 +8,10 @@ export const load = async ({ locals }) => {
   }
 
   const mediaResults = await db.select().from(media)
+  const weddingDay = "18.04.2026";
 
   return {
-    media: mediaResults
+    media: mediaResults,
+    weddingDay
   }
 }

@@ -12,6 +12,10 @@
     let { data }: { data: PageData } = $props();
 </script>
 
+<svelte:head>
+    <title>Jana & Philipp</title>
+</svelte:head>
+
 <div class="bg-background">
     {#if !Boolean(data.rsvp)}
         <RSVPForm form={data.form} />

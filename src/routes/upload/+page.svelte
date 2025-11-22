@@ -197,11 +197,11 @@
 </script>
 
 <svelte:head>
-    <title>Bilder hochladen</title>
+    <title>Jana & Philipp – Upload</title>
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8 max-w-4xl">
-    <div class="mb-8">
+    <div class="mb-8 pt-16">
         <h1 class="text-3xl font-bold mb-2">Bilder hochladen</h1>
         <p class="text-muted-foreground">
             Laden Sie Ihre Bilder und Videos hoch. Bilder und Videos bis zu
