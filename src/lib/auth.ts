@@ -30,7 +30,7 @@ export const auth = betterAuth({
     magicLink({
       sendMagicLink: async ({ email, token, url }) => {
         const { error } = await resend.emails.send({
-          from: 'Jana & Philipp <einladung@klinikseelsorge-mannheim.de>',
+          from: 'Jana & Philipp <anmeldung@hochzeit-jp.de>',
           to: [email],
           subject: 'Login',
           html: loginEmail({ email, token, url }),
