@@ -20,7 +20,6 @@
     let currentIndex = $state(0);
     let carouselApi = $state<CarouselAPI>();
     let activeSlide = $state<string | null>(null);
-    let uploadDis;
 
     const count = $derived(
         carouselApi ? carouselApi.scrollSnapList().length : 0,
@@ -41,8 +40,6 @@
             });
         }
     });
-
-    let date = new Date();
 </script>
 
 <svelte:head>
