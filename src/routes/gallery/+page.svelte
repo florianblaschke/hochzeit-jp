@@ -60,8 +60,8 @@
     {#if data.media.length === 0}
         <div class="text-center py-16">
             <p class="text-muted-foreground text-lg">
-                Zur Zeit gibt es noch keine Bilder. Ab dem 18.04.2026 kannst du
-                Bilder von der Hochzeit hier hochladen.
+                Zur Zeit gibt es noch keine Bilder. <br />Ab dem 18.04.2026
+                kannst du Bilder von der Hochzeit hier hochladen.
             </p>
         </div>
     {:else}
