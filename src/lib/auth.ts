@@ -14,7 +14,7 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
-  trustedOrigins: ["https://hochzeit-jp.de", "https://hochzeit-jp.vercel.app", "http://localhost:5173"],
+  trustedOrigins: ["https://hochzeit-jp.de", "https://www.hochzeit-jp.de", "https://hochzeit-jp.vercel.app", "http://localhost:5173"],
   baseURL: env.BETTER_AUTH_URL,
   emailAndPassword: { enabled: false },
   user: {
