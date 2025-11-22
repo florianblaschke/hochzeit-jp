@@ -78,7 +78,7 @@
                             }),
                         )}
                     >
-                        JP Wedding
+                        Jana & Philipp
                     </a>
                     {#if isLoggedIn || $session.data}
                         <a
@@ -96,7 +96,7 @@
                     {/if}
                 </div>
                 <div class="flex-1 flex justify-end gap-4">
-                    {#if typeof attending !== "undefined"}
+                    <!-- {#if typeof attending !== "undefined"}
                         <Badge
                             variant="default"
                             class={cn(
@@ -111,7 +111,7 @@
                                 goto("/login", { invalidateAll: true });
                             }}>Abmelden</Button
                         >
-                    {/if}
+                    {/if} -->
                     <ThemeSwitcher />
                 </div>
             </div>

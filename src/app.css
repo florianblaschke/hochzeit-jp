@@ -115,7 +115,7 @@
 }
 
 @utility py-container {
-    @apply py-8 md:py-16
+    @apply py-8 md:py-16 px-4 md:px-8
 }
 
 @layer base {

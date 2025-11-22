@@ -23,7 +23,7 @@
 </script>
 
 <div class="flex items-center justify-between md:hidden px-4 py-4">
-    <a href="/" class="font-bold text-lg"> JP Wedding </a>
+    <a href="/" class="font-bold text-lg">Jana & Philipp</a>
     {#if isLoggedIn || $session.data}
         <Sheet.Root bind:open={isSheetOpen}>
             <Sheet.Trigger
@@ -35,8 +35,8 @@
             >
             <Sheet.Content side="right">
                 <Sheet.Header>
-                    <Sheet.Title>JP Wedding</Sheet.Title>
-                    <Sheet.Description>
+                    <Sheet.Title>Jana & Philipp</Sheet.Title>
+                    <!-- <Sheet.Description>
                         {#if typeof attending !== "undefined"}
                             <Badge
                                 variant="default"
@@ -45,7 +45,7 @@
                                 )}>{attending ? "Zugesagt" : "Abgesagt"}</Badge
                             >
                         {/if}
-                    </Sheet.Description>
+                    </Sheet.Description> -->
                 </Sheet.Header>
                 <div class="grid flex-1 auto-rows-min gap-6 px-4">
                     {#if isLoggedIn || $session.data}

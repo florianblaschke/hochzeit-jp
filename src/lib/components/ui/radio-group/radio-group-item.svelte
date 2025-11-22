@@ -26,7 +26,7 @@
         >
             {#if checked}
                 <CircleIcon
-                    class="fill-primary absolute left-1/2 top-1/2 size-2 -translate-x-1/2 -translate-y-1/2"
+                    class="fill-accent dark:fill-accent-foreground absolute left-1/2 top-1/2 size-2 -translate-x-1/2 -translate-y-1/2"
                 />
             {/if}
         </div>

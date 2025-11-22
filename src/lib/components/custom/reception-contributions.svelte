@@ -14,7 +14,7 @@
         class="container mx-auto flex flex-col items-center md:flex-row md:gap-12"
     >
         <article class="text-center mb-8">
-            <h2 class="text-3xl font-bold mb-4">Beiträge zum Sektempfang</h2>
+            <h2 class="text-3xl font-bold mb-4">Sektempfang</h2>
             <p class="text-muted-foreground max-w-2xl mx-auto mb-6">
                 Wir freuen uns sehr, wenn ihr Häppchen, Kuchen oder Ähnliches
                 zum Sektempfang beisteuert. Bitte tragt euch dafür in die Liste

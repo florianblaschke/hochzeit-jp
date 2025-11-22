@@ -14,7 +14,7 @@
     ];
 </script>
 
-<section class="bg-secondary py-container">
+<section class="bg-secondary text-secondary-foreground py-container">
     <div class="text-center mb-8">
         <h2 class="text-3xl font-bold mb-4">Ablauf</h2>
     </div>
@@ -26,9 +26,7 @@
             {#each timelineItems as item}
                 <div class="flex flex-1 flex-col items-center gap-6 p-6">
                     <div class="flex-shrink-0 w-20 text-right">
-                        <span class="text-lg font-semibold text-primary"
-                            >{item.time}</span
-                        >
+                        <span class="text-lg font-semibold">{item.time}</span>
                     </div>
                     <div class="text-center">
                         <h3 class="text-xl font-medium whitespace-nowrap">

@@ -6,7 +6,7 @@
 </script>
 
 <section class="text-center py-container">
-    <div class="max-w-3xl mx-auto bg-card rounded-lg p-8">
+    <div class="max-w-3xl mx-auto p-8">
         <blockquote
             class="text-lg md:text-2xl leading-relaxed text-foreground italic mb-6"
         >
