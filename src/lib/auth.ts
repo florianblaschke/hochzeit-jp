@@ -5,7 +5,6 @@ import { APIError, betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { magicLink } from "better-auth/plugins";
 import { sveltekitCookies } from "better-auth/svelte-kit";
-import { eq } from "drizzle-orm";
 import { Resend } from "resend";
 import { db } from "./server/db";
 const resend = new Resend(env.RESEND)
@@ -15,6 +14,7 @@ export const auth = betterAuth({
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
+  trustedOrigins: ["https://hochzeit-jp.de", "https://hochzeit-jp.vercel.app", "http://localhost:5173"],
   baseURL: env.BETTER_AUTH_URL,
   emailAndPassword: { enabled: false },
   user: {
