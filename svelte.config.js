@@ -19,7 +19,6 @@ const config = {
         minimumCacheTTL: 300,
         domains: ["hochzeit-jp.vercel.app", "utfs.io", "hochzeit-jp.de"],
         formats: ["image/webp"]
-
       }
     })
   }

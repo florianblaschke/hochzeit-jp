@@ -2,6 +2,8 @@ import { db } from "$lib/server/db/index.js"
 import { rsvp } from "$lib/server/db/schema.js"
 import { eq } from "drizzle-orm"
 
+export const prerender = false
+
 export const load = async ({ locals }) => {
   let attending: boolean | undefined
 
