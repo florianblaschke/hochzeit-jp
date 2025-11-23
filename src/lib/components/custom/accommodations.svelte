@@ -16,8 +16,7 @@
         {
             name: "Dormero Hotel Freudenstadt",
             url: "https://www.dormero.de/hotel-freudenstadt/",
-            // description:
-            //     "Rabatt von 20% auf die Tagesrate SMART. Flexibel bis 1 Tag vor Anreise kostenfrei stornierbar und ohne Vorauskasse. Buchungen müssen über die Website www.dormero.de mit Kreditkarte/Verfallsdatum als Garantie abgewickelt werden - nach Auswahl des Hotel und nach Eingabe der Reisedaten fügen Sie zusätzlich den PROMOCODE EVENTFLEX im vorgegebenen Feld dazu und die Sonderraten werden dann angezeigt. Frühstück kann separat auf Wunsch dazu gebucht werden.",
+            description: "20% auf die Tagesrate SMART mit dem Code: EVENTFLEX",
         },
         {
             name: "Hotel Hohenried",
@@ -30,7 +29,7 @@
     ];
 </script>
 
-<section class="bg-secondary py-container">
+<section class="bg-secondary text-secondary-foreground py-container">
     <div class="container mx-auto">
         <div class="text-center mb-8">
             <h2 class="text-3xl font-bold mb-4">Unterkünfte</h2>
@@ -45,7 +44,7 @@
             {#each accommodations as accommodation, index}
                 <Card
                     class={cn(
-                        "w-full text-center bg-transparent text-foreground",
+                        "w-full text-center bg-transparent text-secondary-foreground",
                     )}
                 >
                     <CardHeader>
@@ -60,7 +59,7 @@
                                 rel="noopener"
                                 class={buttonVariants({
                                     variant: "link",
-                                    class: "pl-0!",
+                                    class: "pl-0! text-secondary-foreground",
                                 })}
                                 href={accommodation.url}
                             >
@@ -68,13 +67,12 @@
                                 Online buchen
                             </a>
                             {#if accommodation.description}
-                                {accommodation.description}
+                                <span class="block text-secondary-foreground">
+                                    {accommodation.description}
+                                </span>
                             {/if}
                         </CardDescription>
                     </CardHeader>
-                    <CardFooter>
-                        <CardAction></CardAction>
-                    </CardFooter>
                 </Card>
             {/each}
         </div>
