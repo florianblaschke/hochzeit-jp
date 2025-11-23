@@ -10,7 +10,7 @@
         <blockquote
             class="text-lg md:text-2xl leading-relaxed text-foreground italic mb-6"
         >
-            "{verse.text}"
+            &bdquo;{verse.text}&rdquo;
         </blockquote>
         <cite class="text-muted-foreground font-medium text-sm">
             {verse.reference}
