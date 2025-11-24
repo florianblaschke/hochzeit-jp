@@ -125,7 +125,7 @@
   }
 
   h2 {
-    @apply text-primary dark:text-primary-foreground;
+    @apply text-primary;
   }
 
   body {
