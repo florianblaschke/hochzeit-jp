@@ -26,6 +26,10 @@
             name: "Camping Langenwald",
             url: "https://camping-langenwald.de/",
         },
+        {
+            name: "Jugendherberge Freudenstadt",
+            url: "https://www.jugendherberge.de/jugendherbergen/freudenstadt/",
+        },
     ];
 </script>
 
@@ -45,6 +49,7 @@
                 <Card
                     class={cn(
                         "w-full text-center bg-transparent text-secondary-foreground",
+                        index === 0 && "col-span-full"
                     )}
                 >
                     <CardHeader>

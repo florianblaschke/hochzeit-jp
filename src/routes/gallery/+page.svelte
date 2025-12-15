@@ -43,12 +43,12 @@
 </script>
 
 <svelte:head>
-    <title>Jana & Philipp – Gallerie</title>
+    <title>Jana & Philipp – Galerie</title>
 </svelte:head>
 
 <div class="container mx-auto px-4 py-8">
     <div class="mb-8 flex items-center justify-between pt-16">
-        <h1 class="text-3xl font-bold mb-2">Gallerie</h1>
+        <h1 class="text-3xl font-bold mb-2">Galerie</h1>
         <a href="/upload" class={cn(buttonVariants({ variant: "link" }))}>
             Bilder hochladen
         </a>

@@ -53,7 +53,7 @@
                             onclick={() => (isSheetOpen = false)}
                             href="/gallery"
                             class={cn(buttonVariants({ variant: "link" }))}
-                            >Gallerie</a
+                            >Galerie</a
                         >
                     {/if}
                     {#if isAdmin}
