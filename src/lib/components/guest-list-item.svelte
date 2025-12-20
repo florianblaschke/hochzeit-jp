@@ -50,11 +50,14 @@
     };
 </script>
 
-<li class:opacity-50={$deleteMutation.isPending}>
+<li class:opacity-50={$deleteMutation.isPending} class="border-b">
     <Card>
         <CardHeader>
             <CardTitle class="flex items-center justify-between">
                 {guest.user.name}
+                <span class="text-sm text-muted-foreground"
+                    >{guest.user.email}</span
+                >
                 <!-- <AlertDialog>
                     <AlertDialogTrigger
                         class={cn(buttonVariants({ variant: "destructive" }))}
