@@ -139,7 +139,7 @@
             {/each}
         </div>
         {#if hasMore}
-            <div bind:this={sentinelElement} class="h-20" />
+            <div bind:this={sentinelElement} class="h-20"></div>
         {/if}
         <Dialog bind:open={isOpen}>
             <DialogContent
