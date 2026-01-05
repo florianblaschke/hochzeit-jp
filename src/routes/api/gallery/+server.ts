@@ -1,13 +1,13 @@
 import { db } from "$lib/server/db";
 import { media } from "$lib/server/db/schema";
-import { redirect } from "@sveltejs/kit";
+import { json } from "@sveltejs/kit";
 import { desc, sql } from "drizzle-orm";
 
 const MEDIA_PER_PAGE = 20;
 
-export const load = async ({ locals, url }) => {
+export const GET = async ({ request, locals, url }) => {
   if (!locals.user) {
-    redirect(307, "/login");
+    return json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const offset = Number(url.searchParams.get("offset")) || 0;
@@ -23,9 +23,9 @@ export const load = async ({ locals, url }) => {
     .select({ count: sql<number>`cast(count(*) as integer)` })
     .from(media);
 
-  return {
+  return json({
     media: mediaResults,
     totalCount: count,
     offset,
-  };
+  });
 };

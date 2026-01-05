@@ -20,23 +20,67 @@
     let currentIndex = $state(0);
     let carouselApi = $state<CarouselAPI>();
     let activeSlide = $state<string | null>(null);
+    let allMedia = $state(data.media);
+    let isLoading = $state(false);
+    let hasMore = $derived(data.offset + allMedia.length < data.totalCount);
+    let sentinelElement = $state<HTMLDivElement>();
 
     const count = $derived(
         carouselApi ? carouselApi.scrollSnapList().length : 0,
     );
     let current = $state(0);
 
+    const loadMore = async () => {
+        if (isLoading || !hasMore) return;
+
+        isLoading = true;
+        try {
+            const response = await fetch(
+                `/api/gallery?offset=${data.offset + allMedia.length}`,
+            );
+            const newData = await response.json();
+            allMedia = [...allMedia, ...newData.media];
+        } catch (error) {
+            console.error("Failed to load more media:", error);
+        } finally {
+            isLoading = false;
+        }
+    };
+
+    $effect(() => {
+        if (!sentinelElement) {
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting && hasMore && !isLoading) {
+                    loadMore();
+                }
+            },
+            { rootMargin: "200px" },
+        );
+
+        observer.observe(sentinelElement);
+        return () => observer.disconnect();
+    });
+
     $effect(() => {
         if (isOpen && carouselApi) {
             carouselApi.scrollTo(currentIndex, true);
-            activeSlide = data.media[currentIndex].id;
+            activeSlide = allMedia[currentIndex].id;
         }
 
         if (carouselApi) {
             current = carouselApi.selectedScrollSnap() + 1;
             carouselApi.on("select", () => {
                 current = carouselApi!.selectedScrollSnap() + 1;
-                activeSlide = data.media[current - 1].id;
+                activeSlide = allMedia[current - 1].id;
+
+                // Load more images when reaching the last image
+                if (current === allMedia.length - 5 && hasMore && !isLoading) {
+                    loadMore();
+                }
             });
         }
     });
@@ -54,7 +98,7 @@
         </a>
     </div>
 
-    {#if data.media.length === 0}
+    {#if allMedia.length === 0}
         <div class="text-center py-16">
             <p class="text-muted-foreground text-lg">
                 Zur Zeit gibt es noch keine Bilder. <br />Ab dem 18.04.2026
@@ -63,7 +107,7 @@
         </div>
     {:else}
         <div class="flex gap-px md:gap-1" style="flex-wrap: wrap;">
-            {#each data.media as media, index}
+            {#each allMedia as media, index}
                 <button
                     type="button"
                     class="relative aspect-square basis-1/2 md:basis-1/4 max-w-[49%] md:max-w-[24.5%]"
@@ -94,6 +138,9 @@
                 </button>
             {/each}
         </div>
+        {#if hasMore}
+            <div bind:this={sentinelElement} class="h-20" />
+        {/if}
         <Dialog bind:open={isOpen}>
             <DialogContent
                 class="w-screen h-screen max-w-none rounded-none border-0 p-0 bg-black"
@@ -104,7 +151,7 @@
                     class="w-screen h-screen"
                 >
                     <CarouselContent class="h-screen">
-                        {#each data.media as media, i}
+                        {#each allMedia as media, i}
                             <CarouselItem
                                 class="h-screen flex items-center justify-center"
                             >
