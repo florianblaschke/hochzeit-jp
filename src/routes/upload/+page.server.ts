@@ -13,10 +13,10 @@ export const load: PageServerLoad = async ({ locals }) => {
     redirect(307, "/login")
   }
 
-  let date = dayjs.tz("2026-04-18", "Europe/Berlin").valueOf()
-  let now = dayjs().tz("Europe/Berlin").valueOf()
+  // let date = dayjs.tz("2026-04-18", "Europe/Berlin").valueOf()
+  // let now = dayjs().tz("Europe/Berlin").valueOf()
 
-  if (env.NODE_ENV === "production" && now < date) {
-    redirect(307, "/")
-  }
+  // if (env.NODE_ENV === "production" && now < date) {
+  //   redirect(307, "/")
+  // }
 }
