@@ -28,7 +28,7 @@
     {src}
     controls
     preload="metadata"
-    class={cn("max-w-full max-h-screen object-contain select-none", className)}
+    class={cn("max-w-full max-h-dvh object-contain select-none", className)}
 >
     <track default kind="captions" />
     <source {src} {type} />

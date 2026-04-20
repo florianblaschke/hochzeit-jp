@@ -33,9 +33,9 @@
         {@render children?.()}
         {#if showCloseButton}
             <DialogPrimitive.Close
-                class="text-white ring-offset-background focus:ring-ring rounded-xs focus:outline-hidden absolute end-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0"
+                class="text-white ring-offset-background focus:ring-ring rounded-sm focus:outline-hidden absolute end-4 top-4 z-50 min-h-11 min-w-11 flex items-center justify-center opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0"
             >
-                <XIcon />
+                <XIcon class="size-6" />
                 <span class="sr-only">Close</span>
             </DialogPrimitive.Close>
         {/if}
