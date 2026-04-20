@@ -25,15 +25,11 @@
 
 <video
     bind:this={videoNode}
-    {src}
     controls
+    playsinline
     preload="metadata"
     class={cn("max-w-full max-h-dvh object-contain select-none", className)}
 >
-    <track default kind="captions" />
     <source {src} {type} />
-
-    Download the
-    <a href={src}>Video</a>
-    here
+    <track default kind="captions" />
 </video>
